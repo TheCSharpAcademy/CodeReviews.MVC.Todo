@@ -1,0 +1,33 @@
+﻿@model List<TodoItem>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="todoPage">
+
+    <h1 class="m-3">Todos</h1>
+
+    <a type="button" id="create-todo" class="btn btn-primary">Create New</a>
+
+    @* Hidde untill Create button clicked *@
+    <form style="display: none;" id="add-form" action="javascript:void(0);" method="post" onsubmit="AddTodoItem()">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="add-title" placeholder="Enter title">
+        </div>
+        <div class="form-group">
+            <label for="dueDate">Due Date</label>
+            <input type="date" class="form-control" id="add-dueDate">
+        </div>
+
+        <button value="add" type="submit" class="btn btn-primary mt-2">Submit</button>
+    </form>
+
+
+    <div class="todoSection">
+        <table class="table">
+
+            <tbody id="todos"></tbody>
+        </table>
+
+    </div>
+</div>
