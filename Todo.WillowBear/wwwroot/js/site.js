@@ -15,9 +15,6 @@ createButton.addEventListener('click', () => {
     }
 });
 
-
-
-
 //Get all items
 function GetAllTodos() {
     console.log('GetAllTodos');
@@ -25,7 +22,6 @@ function GetAllTodos() {
         .then(response => response.json())
         .then(data => _displayItems(data))
         .catch(error => console.error('Unable to get items.', error));
-
 }
 
 //Add item
@@ -34,12 +30,16 @@ function AddTodoItem() {
     const addTitleTextbox = document.getElementById('add-title');
     const addDueDate = document.getElementById('add-dueDate');
 
+    // Creates new Todo Object from form data
+    //
     const todo = {
         Title: addTitleTextbox.value.trim(),
         DueDate: addDueDate.value,
         IsDone: false
     }
 
+    // Sends POST request to API
+    //
     fetch(uri + '/create', {
         method: 'POST',
         headers: {
@@ -48,8 +48,9 @@ function AddTodoItem() {
         },
         body: JSON.stringify(todo)
     })
-
         .then(() => {
+            // Resets form data
+            //
             addTitleTextbox.value = '';
             addDueDate.value = '';
             document.getElementById('add-form').style.display = 'none';
@@ -59,15 +60,13 @@ function AddTodoItem() {
     GetAllTodos();
 }
 
-//Delete item
+
 function DeleteTodoItem(id) {
     fetch(`${uri}/delete/${id}`, {
         method: 'DELETE'
     })
         .then(() => GetAllTodos())
         .catch(error => console.error('Unable to delete todo.', error));
-
-
 }
 
 function GetEditTodoById(id) {
@@ -78,18 +77,25 @@ function GetEditTodoById(id) {
     }
 };
 
-
-//displays items
-
 const _displayItems = function (data, id) {
+
     const tBody = document.getElementById('todos');
-    tBody.innerHTML = '';
-    console.log(data);
-    let itemNum = 0;
     const button = document.createElement('button');
     let editId = document.getElementById('editTrue');
+    let itemNum = 0;
+
+
+    // Resets innerHTML of tBody for new data
+    //
+    tBody.innerHTML = '';
+
+    //Iterate through data array of todos
+    //
     data.forEach(item => {
 
+        // Check if id is equal to current item id
+        // Displays edit form if true
+        //
         if (id == item.id) {
             console.log("editItem = " + item.id);
             _displayEditForm(item);
@@ -97,23 +103,32 @@ const _displayItems = function (data, id) {
 
         } else {
 
+            // Creates checkbox input
+            //
             let isDoneCheck = document.createElement('input');
             isDoneCheck.type = 'checkbox';
             isDoneCheck.disabled = true;
             isDoneCheck.checked = item.isDone;
 
+            // Creates edit button
+            //
             let editButton = button.cloneNode(false);
             editButton.classList.add('editButton', 'todoButton');
             editButton.setAttribute('onclick', `GetEditTodoById(${item.id})`);
 
+            // Creates delete button
+            //
             let deleteButton = button.cloneNode(false);
             deleteButton.classList.add('deleteButton', "todoButton");
             deleteButton.setAttribute('onclick', `DeleteTodoItem(${item.id})`);
 
-
+            // Creates table row
+            //
             let tr = tBody.insertRow();
             tr.classList.add("bodyRow", itemNum);
 
+            // Creates first cell
+            //
             let td1 = tr.insertCell(0);
             td1.appendChild(isDoneCheck);
             let textDiv = document.createElement('div')
@@ -121,14 +136,14 @@ const _displayItems = function (data, id) {
             textDiv.className = "title";
             td1.appendChild(textDiv);
 
-            let td3 = tr.insertCell(1);
-            td3.className = "buttonCell";
-            td3.appendChild(editButton);
-            td3.appendChild(deleteButton);
+            // Creates second cell
+            //
+            let td2 = tr.insertCell(1);
+            td2.className = "buttonCell";
+            td2.appendChild(editButton);
+            td2.appendChild(deleteButton);
         }
-    }
-
-    );
+    });
     todos = data;
 }
 
