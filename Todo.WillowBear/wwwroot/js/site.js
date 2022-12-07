@@ -1,6 +1,7 @@
 ﻿const uri = 'api/todos';
 const createButton = document.getElementById('create-todo');
 let todos = [];
+let buttonClicked = false;
 
 createButton.addEventListener('click', () => {
     const form = document.getElementById('add-form');
@@ -14,6 +15,7 @@ createButton.addEventListener('click', () => {
         form.style.display = 'none';
     }
 });
+
 
 //Get all items
 function GetAllTodos() {
@@ -92,6 +94,7 @@ const _displayItems = function (data, id) {
     //Iterate through data array of todos
     //
     data.forEach(item => {
+        buttonClicked = false;
 
         // Check if id is equal to current item id
         // Displays edit form if true
@@ -151,22 +154,29 @@ const _displayItems = function (data, id) {
 //displays edit form
 const _displayEditForm = function (todo) {
     let tBody = document.getElementById('todos');
-    console.log("displaying edit form")
+
+    // Creates checkbox input
+    //
     let isDoneCheck = document.createElement('input');
     isDoneCheck.type = 'checkbox';
     isDoneCheck.disabled = true;
     isDoneCheck.checked = todo.isDone;
 
+    // Creates Confirm button
+    //
+    let confirmButton = document.createElement('button');
+    confirmButton.type = 'submit';
+    confirmButton.classList.add('confirmButton');
+
+    // Creates edit input
     let titleInput = document.createElement('input');
     titleInput.type = 'text';
     titleInput.className = 'editInput';
     titleInput.value = todo.title;
 
-
-    let confirmButton = document.createElement('button');
-    confirmButton.type = 'submit';
-    confirmButton.classList.add('confirmButton');
-    confirmButton.addEventListener('click', () => {
+    // Gets form data and sends PUT request to API
+    //
+    confirmButton.addEventListener('mousedown', () => {
         todo = {
             id: todo.id,
             title: document.querySelector('input.editInput').value.trim(),
@@ -174,7 +184,7 @@ const _displayEditForm = function (todo) {
             DueDate: todo.dueDate,
             createdDate: todo.createdDate,
         }
-        console.log("edited" + todo);
+
         fetch(`${uri}/edit/${todo.id}`, {
             method: 'PUT',
             headers: {
@@ -187,12 +197,18 @@ const _displayEditForm = function (todo) {
                 document.getElementById('editTrue').remove();
                 GetAllTodos();
             })
+
+        buttonClicked = true;
     })
 
-    if (document.activeElement !== document.querySelector('.editInput')) {
-        removeEditFocus();
-    }
-
+    // adds blur event listener to input
+    // removes edit form if input is blurred AND confirm button is not clicked
+    titleInput.addEventListener('blur', () => {
+        if (buttonClicked == false) {
+            document.getElementById('editTrue').remove();
+            _displayItems(todos, -1);
+        }
+    });
 
     let tr = tBody.insertRow();
     tr.setAttribute('id', 'editTrue');
@@ -203,17 +219,4 @@ const _displayEditForm = function (todo) {
 
     let td2 = tr.insertCell(1);
     td2.appendChild(confirmButton);
-
-
-}
-
-let removeEditFocus = function () {
-    if (document.querySelector('.editInput')) {
-        document.querySelector('.editInput').addEventListener('focusout', function () {
-            document.querySelector('.editInput').classList.remove('editInput');
-            _displayItems(todos, -1)
-        }
-        )
-    }
-
 }
