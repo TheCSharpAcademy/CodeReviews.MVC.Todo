@@ -177,3 +177,9 @@ input.editInput:focus {
 
 
 }
+
+.checked {
+  text-decoration: line-through;
+  color: grey;
+  opacity: 0.5;
+}

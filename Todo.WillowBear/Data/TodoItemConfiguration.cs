@@ -15,7 +15,7 @@ namespace Todo.WillowBear.Data
             builder.ToTable("TodoItems");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Title).IsRequired().HasMaxLength(20);
-            builder.Property(x => x.IsDone).IsRequired().HasDefaultValue(false);
+            builder.Property(x => x.IsDone).IsRequired().HasDefaultValue(0);
             builder.Property(x => x.CreatedAt).IsRequired().HasDefaultValueSql("datetime('now')");
             builder.Property(x => x.DueDate);
         }

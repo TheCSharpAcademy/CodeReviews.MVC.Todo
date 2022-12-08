@@ -37,7 +37,7 @@ function AddTodoItem() {
     const todo = {
         Title: addTitleTextbox.value.trim(),
         DueDate: addDueDate.value,
-        IsDone: false
+        IsDone: 0
     }
 
     // Sends POST request to API
@@ -110,7 +110,7 @@ const _displayItems = function (data, id) {
             //
             let isDoneCheck = document.createElement('input');
             isDoneCheck.type = 'checkbox';
-            isDoneCheck.disabled = true;
+            isDoneCheck.disabled = false;
             isDoneCheck.checked = item.isDone;
 
             // Creates edit button
@@ -130,6 +130,14 @@ const _displayItems = function (data, id) {
             let tr = tBody.insertRow();
             tr.classList.add("bodyRow", itemNum);
 
+            if (isDoneCheck.checked == true) {
+                tr.classList.add("checked");
+                console.log("checkedled");
+            } else {
+                tr.classList.remove("checked");
+                console.log("uncheckedled");
+            }
+
             // Creates first cell
             //
             let td1 = tr.insertCell(0);
@@ -145,6 +153,10 @@ const _displayItems = function (data, id) {
             td2.className = "buttonCell";
             td2.appendChild(editButton);
             td2.appendChild(deleteButton);
+
+            isDoneCheck.addEventListener('click', () => {
+                IsDoneCheck(item.id);
+            });
         }
     });
     todos = data;
@@ -219,4 +231,28 @@ const _displayEditForm = function (todo) {
 
     let td2 = tr.insertCell(1);
     td2.appendChild(confirmButton);
+}
+
+// IsDoneCheck
+
+function IsDoneCheck(id) {
+    let todo = todos.find(todo => todo.id === id);
+    console.log(todo);
+    if (todo.isDone == 0) {
+        todo.isDone = 1;
+    } else {
+        todo.isDone = 0;
+    }
+
+    fetch(`${uri}/edit/${todo.id}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(todo)
+    })
+        .then(() => {
+            GetAllTodos();
+        })
 }
