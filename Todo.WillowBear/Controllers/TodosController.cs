@@ -23,7 +23,8 @@ public class TodosController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
     {
-        return await _context.TodoItems.ToListAsync();
+        return await _context.TodoItems.OrderBy(x => x.IsDone).ToListAsync();
+
     }
 
 
