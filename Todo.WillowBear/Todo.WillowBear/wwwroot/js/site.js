@@ -132,10 +132,8 @@ const _displayItems = function (data, id) {
 
             if (isDoneCheck.checked == true) {
                 tr.classList.add("checked");
-                console.log("checkedled");
             } else {
                 tr.classList.remove("checked");
-                console.log("uncheckedled");
             }
 
             // Creates first cell
