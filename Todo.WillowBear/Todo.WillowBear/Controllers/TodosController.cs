@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using System.Diagnostics;
 using Todo.WillowBear.Data;
 using Todo.WillowBear.Models;
 
@@ -18,15 +17,12 @@ public class TodosController : ControllerBase
         _context = context;
     }
 
-
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
     {
         return await _context.TodoItems.OrderBy(x => x.IsDone).ToListAsync();
 
     }
-
 
     [HttpPost]
     [Route("Create")]
