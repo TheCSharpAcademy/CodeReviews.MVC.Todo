@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TodoList.Data;
 
@@ -10,9 +11,11 @@ using TodoList.Data;
 namespace TodoList.Migrations
 {
     [DbContext(typeof(TodoDbContext))]
-    partial class TodoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230324092301_RemoveIsCompletedFromModel")]
+    partial class RemoveIsCompletedFromModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

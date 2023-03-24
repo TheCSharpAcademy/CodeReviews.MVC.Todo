@@ -10,12 +10,12 @@ function getItems() {
 
 function addItem() {
     const taskTitleTextBox = document.getElementById('add-task');
-    
+
     const todoItem = {
-        isCompleted: false,
-        task: taskTitleTextBox.value.trim()
+        task: taskTitleTextBox.value.trim(),
+        status: 1,
     };
-    
+
     fetch(uri, {
         method: 'post',
         headers: {
@@ -32,7 +32,7 @@ function addItem() {
         .catch(error => console.error('Unable to add item.', error));
 }
 
-function deleteItem(id){
+function deleteItem(id) {
     fetch(`${uri}/${id}`, {
         method: 'delete'
     })
@@ -43,18 +43,19 @@ function deleteItem(id){
 function displayEditForm(id) {
     const todoItem = todos.find(item => item.id === id);
 
-    document.getElementById('edit-task').value = todoItem.task;
     document.getElementById('edit-id').value = todoItem.id;
-    document.getElementById('edit-isComplete').checked = todoItem.isCompleted;
+    document.getElementById('edit-task').value = todoItem.task;
+    document.getElementById('edit-status').value = todoItem.status;
     document.getElementById('editForm').style.display = 'block';
 }
 
 function updateItem() {
     const itemId = document.getElementById('edit-id').value;
+    const status = document.getElementById('edit-status').value;
     const item = {
         id: parseInt(itemId, 10),
-        isCompleted: document.getElementById('edit-isComplete').checked,
-        task: document.getElementById('edit-task').value.trim()
+        task: document.getElementById('edit-task').value.trim(),
+        status: parseInt(status, 10),
     };
 
     fetch(`${uri}/${itemId}`, {
@@ -89,33 +90,40 @@ function _displayItems(data) {
 
     _displayCount(data.length);
 
-    const button = document.createElement('button');
+    const icon = document.createElement('i');
 
     data.forEach(item => {
         let isCompleteCheckbox = document.createElement('input');
         isCompleteCheckbox.type = 'checkbox';
         isCompleteCheckbox.classList.add("form-check-input");
         isCompleteCheckbox.disabled = true;
-        isCompleteCheckbox.checked = item.isCompleted;
 
-        let editButton = button.cloneNode(false);
-        editButton.innerText = 'Edit';
-        editButton.classList.add("btn", "btn-primary");
+        let editButton = icon.cloneNode(false);
+        editButton.classList.add("btn", "btn-outline-primary", "bi", "bi-pen-fill");
         editButton.setAttribute('onclick', `displayEditForm(${item.id})`);
 
-        let deleteButton = button.cloneNode(false);
-        deleteButton.innerText = 'Delete';
-        deleteButton.classList.add("btn", "btn-primary");
+        let deleteButton = icon.cloneNode(false);
+        deleteButton.classList.add("btn", "btn-outline-danger", "bi", "bi-trash-fill");
         deleteButton.setAttribute('onclick', `deleteItem(${item.id})`);
+
+        let status = document.createElement("p");
+        status.classList.add(
+            "btn", 
+            `${(item.status === 1) ? "btn-success" 
+                : (item.status === 2) ? "btn-warning" 
+                    : "btn-secondary"}`, 
+            "m-0"
+        );
+        status.innerText = item.status === 1 ? "Todo" : item.status === 2 ? "In Progress" : "Completed"
 
         let tr = tBody.insertRow();
 
         let td1 = tr.insertCell(0);
-        td1.appendChild(isCompleteCheckbox);
+        let taskNode = document.createTextNode(item.task);
+        td1.appendChild(taskNode);
 
         let td2 = tr.insertCell(1);
-        let textNode = document.createTextNode(item.task);
-        td2.appendChild(textNode);
+        td2.appendChild(status);
 
         let td3 = tr.insertCell(2);
         td3.appendChild(editButton);

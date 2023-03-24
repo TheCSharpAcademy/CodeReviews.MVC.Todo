@@ -51,7 +51,7 @@ public class TodoRepository : IRepository
         if (oldTodoItem is not null)
         {
             oldTodoItem.Task = todoItem.Task;
-            oldTodoItem.IsCompleted = todoItem.IsCompleted;
+            oldTodoItem.Status = todoItem.Status;
         }
     }
 
