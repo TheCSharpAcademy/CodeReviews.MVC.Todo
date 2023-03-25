@@ -120,6 +120,7 @@ function _displayItems(data) {
 
         let td1 = tr.insertCell(0);
         let taskNode = document.createTextNode(item.task);
+        item.status === 3 ? td1.classList.add("text-decoration-line-through") : ""
         td1.appendChild(taskNode);
 
         let td2 = tr.insertCell(1);
