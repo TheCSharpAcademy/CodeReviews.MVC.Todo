@@ -1,0 +1,157 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<button type="button" class="btn btn-success" id="create">Create To do</button>
+<br />
+<div class="forms" id="forms" style="display: none;">
+    <div class="form-group" id="createform">
+        <label for="exampleInputEmail1">To do name</label>
+        <input type="email" class="form-control" id="todoname" placeholder="Enter your to do's name'">
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" id="submitbutton" class="btn btn-success" />
+    </div>
+</div>
+
+<div class="todolist">
+    <ul id="todoList">
+
+    </ul>
+</div>
+
+
+@section Scripts{
+    <script>
+        const createButton = document.querySelector("#create");
+        const forms = document.querySelector("#forms");
+        const submitButton = document.querySelector("#submitbutton");
+        const todoList = document.getElementById("todoList");
+        createButton.addEventListener('click', function(){
+            forms.style.display = "block";
+        })
+
+        var URL = "https://localhost:7280/todoitems/";
+        const addedTodosNames = [];
+        var responseJson;
+
+        GetTodoList();
+        console.log("From app start")
+
+        function GetTodoList()
+        {
+            fetch(URL)
+                .then(response => response.json())
+                .then(data => {
+                    responseJson = data;
+                    data.forEach((d) => {
+                        var li = document.createElement("li");
+                        var deleteButton = document.createElement("button");
+                        deleteButton.setAttribute('id', d.id);
+                        li.appendChild(document.createTextNode(d.name));
+                        li.appendChild(deleteButton);
+                        deleteButton.addEventListener('click', function () { DeleteTodo(d) })
+                        todoList.appendChild(li);
+
+                        var updateButton = document.createElement("button");
+                        var submitButton = document.createElement("button");
+                        updateButton.setAttribute('id', d.id);
+                        li.appendChild(updateButton);
+                        updateButton.addEventListener('click', () => {
+                            var updateInputField = document.createElement("input");
+                            updateInputField.setAttribute('type', 'text');
+                            updateInputField.setAttribute('placeholder', 'Insert the new name of your to do');
+                            updateInputField.setAttribute('id', 'updatetodo')
+                            li.appendChild(updateInputField);
+                            li.appendChild(submitButton);
+                        })
+                        submitButton.addEventListener('click', () => {
+                            console.log(d);
+                            d.name = document.getElementById("updatetodo").value;
+                            console.log(d);
+                            UpdateTodo(d);
+                        })
+
+                        console.log(d.name + d.id);
+                    })
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+        
+        function DeleteTodo(d){
+            console.log("asd");
+            var URL = "https://localhost:7280/todoitems/" + encodeURIComponent(d.id)
+            console.log(URL);
+            var dataObject = {
+                "id": d.id,
+                "name": d.name,
+                "isComplete": d.isComplete
+            }
+            fetch(URL, {
+                method: "DELETE",
+                body: JSON.stringify(dataObject)
+            })
+            .then(console.log("It was deleted"))
+        }
+
+        function UpdateTodo(d) {
+            console.log("asd");
+            var URL = "https://localhost:7280/todoitems/" + encodeURIComponent(d.id)
+            console.log(URL);
+            var dataObject = {
+                "id": d.id,
+                "name": d.name,
+                "isComplete": d.isComplete
+            }
+            fetch(URL, {
+                method: "PUT",
+                body: JSON.stringify(dataObject),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(() => 
+            {
+                location.reload();
+                console.log("It was updated")
+            })
+        }
+
+
+        
+        submitButton.addEventListener('click', function() { PostToDo() });
+
+        function PostToDo() {
+            var todoName = document.getElementById("todoname").value;
+            const areThereDuplicatedValues = addedTodosNames.some((x) => x == todoName)
+            if (todoName === "") {
+                alert("Please enter a todo name");
+                return;
+            }
+            else if (areThereDuplicatedValues == true) {
+                alert("Please don't enter a todo you added before");
+                return;
+            }
+
+            var data = {
+                "name": todoName,
+                "isComplete": false
+            };
+
+            fetch(URL, {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(location.reload())
+        }
+
+
+        
+    </script>
+}
