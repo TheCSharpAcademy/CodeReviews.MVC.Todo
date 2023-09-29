@@ -92,9 +92,16 @@
             }
             fetch(URL, {
                 method: "DELETE",
-                body: JSON.stringify(dataObject)
+                body: JSON.stringify(dataObject),
+                headers: {
+                    "Content-Type": "application/json"
+                }
             })
-            .then(console.log("It was deleted"))
+            .then(() => 
+            {
+                location.reload();
+                console.log("It was deleted")
+            })
         }
 
         function UpdateTodo(d) {
@@ -148,7 +155,11 @@
                     "Content-Type": "application/json"
                 }
             })
-            .then(location.reload())
+            .then(() => 
+            {
+                location.reload()
+                console.log("It was posted");
+            })
         }
 
 
