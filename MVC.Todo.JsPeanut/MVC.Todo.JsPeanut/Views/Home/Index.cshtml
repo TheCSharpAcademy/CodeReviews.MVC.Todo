@@ -1,17 +1,15 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "To-do App";
 }
 
-<button type="button" class="btn btn-success" id="create">Create To do</button>
-<br />
-<br />
+<button type="button" class="btn btn-success" id="create" style="margin: 0.1em 0px 1em 0px;">Create To do</button>
 <div class="forms" id="forms" style="display: none;">
     <div class="form-group" id="createform">
         <label for="exampleInputEmail1">To do name</label>
-        <input type="email" class="form-control" id="todoname" placeholder="Enter your to do's name'">
+        <input type="text" class="form-control" id="todoname" placeholder="Enter your to do's name'">
     </div>
     <div class="form-group">
-        <input type="submit" value="Create" id="submitbutton" class="btn btn-success" />
+        <input type="submit" value="Create" id="submitbutton" style="margin: 1em 0px 1em 0px;" class="btn btn-success" />
     </div>
 </div>
 
@@ -28,39 +26,34 @@
         const forms = document.querySelector("#forms");
         const submitButton = document.querySelector("#submitbutton");
         const todoList = document.getElementById("todolist");
-
+        var URL = "https://localhost:7280/todoitems/";
+        var addedTodosNames = [];
 
         createButton.addEventListener('click', function(){
             forms.style.display = "block";
         })
-
-        var URL = "https://localhost:7280/todoitems/";
-        const addedTodosNames = [];
-        var responseJson;
+        submitButton.addEventListener('click', () => {
+            PostToDo();
+        });
 
         GetTodoList();
-        console.log("From app start")
 
         function GetTodoList()
         {
             fetch(URL)
                 .then(response => response.json())
                 .then(data => {
-                    responseJson = data;
                     data.forEach((d) => {
                         var li = document.createElement("li");
                         var deleteButton = document.createElement("button");
-                        deleteButton.classList.add('btn', 'btn-danger');
-                        deleteButton.textContent = 'Delete';
-                        li.appendChild(document.createTextNode(d.name));
-                        li.appendChild(deleteButton);
-                        deleteButton.addEventListener('click', function () { DeleteTodo(d) })
-                        todoList.appendChild(li);
-
                         var updateButton = document.createElement("button");
                         var markAsCompleteButton = document.createElement("button");
                         var markAsIncompleteButton = document.createElement("button");
                         var updateSubmitButton = document.createElement("button");
+
+                        //Styling
+                        deleteButton.classList.add('btn', 'btn-danger');
+                        deleteButton.textContent = 'Delete';
                         updateButton.classList.add('btn', 'btn-primary');
                         updateButton.textContent = 'Update';
                         markAsCompleteButton.classList.add('btn', 'btn-success');
@@ -70,24 +63,29 @@
                         updateSubmitButton.classList.add('btn', 'btn-success');
                         updateSubmitButton.textContent = 'Submit';
 
-                        if (d.isComplete == false){
-                            li.style.color = "black";
-                            li.appendChild(markAsCompleteButton);
-                        }
-                        else if (d.isComplete == true){
-                            li.style.color = "green";
-                            li.appendChild(markAsIncompleteButton);
-                        }
-
-                        li.appendChild(updateButton);
-
+                        deleteButton.addEventListener('click', () => {
+                            DeleteTodo(d);
+                        })
+                        updateButton.addEventListener('click', () => {
+                            var todoNameInputField = document.createElement("input");
+                            todoNameInputField.setAttribute('type', 'text');
+                            todoNameInputField.setAttribute('placeholder', 'Insert the new name of your to do');
+                            todoNameInputField.setAttribute('size', todoNameInputField.getAttribute('placeholder').length);
+                            todoNameInputField.setAttribute('id', 'updatetodo');
+                            todoNameInputField.style.marginLeft = "15px";
+                            li.appendChild(todoNameInputField);
+                            li.appendChild(updateSubmitButton);
+                        })
+                        updateSubmitButton.addEventListener('click', () => {
+                            d.name = document.getElementById("updatetodo").value;
+                            UpdateTodo(d);
+                        })
                         markAsCompleteButton.addEventListener('click', () => {
                             li.style.color = "green";
                             li.replaceChild(markAsIncompleteButton, markAsCompleteButton);
                             d.isComplete = true;
                             UpdateTodo(d);
                         })
-
                         markAsIncompleteButton.addEventListener('click', () => {
                             li.style.color = "black";
                             li.replaceChild(markAsCompleteButton, markAsIncompleteButton);
@@ -95,24 +93,20 @@
                             UpdateTodo(d);
                         })
 
-                        updateButton.addEventListener('click', () => {
-                            var todoNameInputField = document.createElement("input");
-                            todoNameInputField.setAttribute('type', 'text');
-                            todoNameInputField.setAttribute('placeholder', 'Insert the new name of your to do');
-                            todoNameInputField.setAttribute('id', 'updatetodo')
-                            li.appendChild(todoNameInputField);
-                            li.appendChild(updateSubmitButton);
-                        })
-                        updateSubmitButton.addEventListener('click', () => {
-                            console.log(d);
-                            d.name = document.getElementById("updatetodo").value;
-                            console.log(d);
-                            UpdateTodo(d);
-                        })
+                        li.appendChild(document.createTextNode(d.name));
+                        if (d.isComplete == false) {
+                            li.style.color = "black";
+                            li.appendChild(markAsCompleteButton);
+                        }
+                        else if (d.isComplete == true) {
+                            li.style.color = "green";
+                            li.appendChild(markAsIncompleteButton);
+                        }
 
-                        console.log(d.name + d.id);
+                        li.appendChild(deleteButton);
+                        todoList.appendChild(li);
+                        li.appendChild(updateButton);
                     })
-                    console.log(data);
                 })
                 .catch(error => {
                     console.error(error);
@@ -120,8 +114,7 @@
         }
         
         function DeleteTodo(d){
-            console.log("asd");
-            var URL = "https://localhost:7280/todoitems/" + encodeURIComponent(d.id)
+            URL = URL + encodeURIComponent(d.id)
             console.log(URL);
             var dataObject = {
                 "id": d.id,
@@ -138,13 +131,11 @@
             .then(() => 
             {
                 location.reload();
-                console.log("It was deleted")
             })
         }
 
         function UpdateTodo(d) {
-            console.log("asd");
-            var URL = "https://localhost:7280/todoitems/" + encodeURIComponent(d.id)
+            URL = URL + encodeURIComponent(d.id)
             console.log(URL);
             var dataObject = {
                 "id": d.id,
@@ -161,13 +152,8 @@
             .then(() => 
             {
                 location.reload();
-                console.log("It was updated")
             })
         }
-
-
-        
-        submitButton.addEventListener('click', function() { PostToDo() });
 
         function PostToDo() {
             var todoName = document.getElementById("todoname").value;
@@ -180,6 +166,7 @@
                 alert("Please don't enter a todo you added before");
                 return;
             }
+            addedTodosNames.push(todoName);
 
             var data = {
                 "name": todoName,
@@ -196,7 +183,6 @@
             .then(() => 
             {
                 location.reload()
-                console.log("It was posted");
             })
         }
     </script>

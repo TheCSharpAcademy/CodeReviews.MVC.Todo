@@ -4,7 +4,7 @@ using TodoApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDbContext<TodoDb>(opt => opt.UseInMemoryDatabase("TodoList"));
+builder.Services.AddDbContext<TodoDb>(opt => opt.UseSqlServer("Data Source=(localdb)\\LocalDBDemo;Initial Catalog=Todos;Integrated Security=True;Connect Timeout=30;Encrypt=False"));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ClientPermission", policy =>
