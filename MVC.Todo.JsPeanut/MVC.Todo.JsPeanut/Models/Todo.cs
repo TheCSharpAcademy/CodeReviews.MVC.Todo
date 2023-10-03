@@ -1,4 +1,4 @@
-﻿namespace TodoApi.Models
+﻿namespace MVC.Todo.JsPeanut.Models
 {
     public class Todo
     {
