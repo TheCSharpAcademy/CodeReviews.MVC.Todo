@@ -73,6 +73,34 @@ function updateItem() {
     return false;
 }
 
+function markAsCompleted(id) {
+    fetch(`${uri}/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ isComplete: true })
+    })
+        .then(function (response) {
+            if (response.ok) {
+                console.log('Todo item marked as completed succesfull');
+
+            }
+            else {
+                console.error('Error marking todo item as completed');
+            }
+        })
+        .then(() => getItems())
+        //.then(function (data) {
+        //    console.log(data); // Log the response
+        //    _displayItems(data); // Update the UI after marking as completed
+        //})
+        .catch(function (error) {
+            console.error('Error: ', error);
+        });
+}
+
 function closeInput() {
     document.getElementById('editForm').style.display = 'none';
 }
@@ -116,6 +144,7 @@ function _displayItems(data) {
         let completeButton = button.cloneNode(false);
         completeButton.innerHTML = '&#10003;';
         completeButton.style.color = 'green';
+        completeButton.setAttribute('onclick', `markAsCompleted(${item.id})`);
 
         let tr = tBody.insertRow();
 

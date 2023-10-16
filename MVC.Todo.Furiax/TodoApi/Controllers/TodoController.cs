@@ -77,22 +77,16 @@ namespace TodoApi.Controllers
 
             return NoContent();
         }
-
-        //PATCH
+        //PATCH: api/Todo
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchTodoItem(long id, [FromBody] TodoItemDTO todoDTO)
+        public async Task<ActionResult> PatchTodo(long id)
         {
-            if (id != todoDTO.Id)
-            { 
-                return BadRequest(); 
-            }
             var todoItem = await _context.TodoItems.FindAsync(id);
-            if (todoItem == null)
-            {
-                return NotFound();
-            }
 
-            todoItem.IsComplete = todoDTO.IsComplete;
+            if (todoItem == null)
+                return NotFound();
+
+            todoItem.IsComplete = true;
             try
             {
                 await _context.SaveChangesAsync();
@@ -101,9 +95,9 @@ namespace TodoApi.Controllers
             {
                 return NotFound();
             }
-
             return NoContent();
         }
+
         // POST: api/Todo
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
