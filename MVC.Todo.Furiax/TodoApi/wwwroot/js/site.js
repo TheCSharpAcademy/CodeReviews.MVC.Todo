@@ -41,7 +41,7 @@ function deleteItem(id) {
 }
 
 function displayEditForm(id) {
-    const item = todos.find(item => item.id == id);
+    const item = todos.find(item => item.id === id);
 
     document.getElementById('edit-name').value = item.name;
     document.getElementById('edit-id').value = item.id;
@@ -69,29 +69,39 @@ function updateItem() {
         .catch(error => console.error('Unable to update item.', error));
 
     closeInput();
+
     return false;
 }
 
-closeInput(){
+function closeInput() {
     document.getElementById('editForm').style.display = 'none';
 }
-function _displayCount(itemCount) {
-    const name = (itemCount == 1) ? 'to-do' : 'to-dos';
 
-    document.getElementById('counter').innerText = `${itemCount} ${name}`;
+function _displayCount(totalItems, completedItems) {
+    const totalName = (totalItems === 1) ? 'to-do' : 'to-do\'s';
+    const completedName = (completedItems === 1) ? 'to-do is' : 'to-do\'s are';
+
+    document.getElementById('counter').innerText = `${totalItems} ${totalName} of which ${completedItems} ${completedName} completed`;
 }
+
 function _displayItems(data) {
     const tBody = document.getElementById('todos');
     tBody.innerHTML = '';
 
-    _displayCount(data.length);
+    const totalTodos = data.length;
+    const completedTodos = data.filter(item => item.isComplete).length;
+
+    _displayCount(totalTodos,completedTodos);
 
     const button = document.createElement('button');
+
     data.forEach(item => {
         let isCompleteCheckbox = document.createElement('input');
         isCompleteCheckbox.type = 'checkbox';
         isCompleteCheckbox.disabled = true;
         isCompleteCheckbox.checked = item.isComplete;
+        isCompleteCheckbox.style.display = 'block';
+        isCompleteCheckbox.style.margin = 'auto';
 
         let editButton = button.cloneNode(false);
         editButton.innerText = 'Edit';
@@ -103,12 +113,12 @@ function _displayItems(data) {
 
         let tr = tBody.insertRow();
 
-        let td1 = tr.insertCell(0);
-        td1.appendChild(isCompleteCheckbox);
-
-        let td2 = tr.insertCell(1);
+        let td2 = tr.insertCell(0);
         let textNode = document.createTextNode(item.name);
         td2.appendChild(textNode);
+
+        let td1 = tr.insertCell(1); 
+        td1.appendChild(isCompleteCheckbox);
 
         let td3 = tr.insertCell(2);
         td3.appendChild(editButton);

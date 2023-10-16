@@ -2,14 +2,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>To-do CRUD</title>
+    <title>To-do List</title>
     <link rel="stylesheet" href="css/site.css" />
 </head>
 <body>
-    <h1>To-do CRUD</h1>
+    <h1 >To-do List</h1>
     <h3>Add</h3>
     <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
-        <input type="text" id="add-name" placeholder="New to-do">
+        <input type="text" id="add-name" placeholder="Insert new to-do">
         <input type="submit" value="Add">
     </form>
 
@@ -28,8 +28,8 @@
 
     <table>
         <tr>
-            <th>Is Complete?</th>
             <th>Name</th>
+            <th>Completed</th>
             <th></th>
             <th></th>
         </tr>
