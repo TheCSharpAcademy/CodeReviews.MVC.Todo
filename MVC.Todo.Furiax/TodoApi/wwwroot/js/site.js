@@ -95,6 +95,8 @@ function _displayItems(data) {
 
     const button = document.createElement('button');
 
+    console.log(data);
+
     data.forEach(item => {
         let isCompleteCheckbox = document.createElement('input');
         isCompleteCheckbox.type = 'checkbox';
@@ -111,20 +113,28 @@ function _displayItems(data) {
         deleteButton.innerText = 'Delete';
         deleteButton.setAttribute('onclick', `deleteItem(${item.id})`);
 
+        let completeButton = button.cloneNode(false);
+        completeButton.innerHTML = '&#10003;';
+        completeButton.style.color = 'green';
+
         let tr = tBody.insertRow();
 
-        let td2 = tr.insertCell(0);
+        let td2 = tr.insertCell(0); 
         let textNode = document.createTextNode(item.name);
         td2.appendChild(textNode);
 
         let td1 = tr.insertCell(1); 
         td1.appendChild(isCompleteCheckbox);
 
-        let td3 = tr.insertCell(2);
+        let td5 = tr.insertCell(2); 
+        td5.appendChild(completeButton);
+
+        let td3 = tr.insertCell(3); 
         td3.appendChild(editButton);
 
-        let td4 = tr.insertCell(3);
+        let td4 = tr.insertCell(4);
         td4.appendChild(deleteButton);
+ 
     });
 
     todos = data;
