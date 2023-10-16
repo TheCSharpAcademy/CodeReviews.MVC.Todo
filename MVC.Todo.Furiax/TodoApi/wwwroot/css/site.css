@@ -21,3 +21,11 @@ td {
     border: 1px solid;
     padding: 5px;
 }
+
+.completed {
+    background-color: #b1ffa3 !important;
+}
+
+.not-completed {
+    background-color: #ff9c9c !important;
+}

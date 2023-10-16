@@ -147,6 +147,8 @@ function _displayItems(data) {
         completeButton.setAttribute('onclick', `markAsCompleted(${item.id})`);
 
         let tr = tBody.insertRow();
+        tr.classList.add(item.isComplete ? 'completed' : 'not-completed');
+
 
         let td2 = tr.insertCell(0); 
         let textNode = document.createTextNode(item.name);
