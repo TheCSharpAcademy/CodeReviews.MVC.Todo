@@ -86,7 +86,10 @@ namespace TodoApi.Controllers
             if (todoItem == null)
                 return NotFound();
 
-            todoItem.IsComplete = true;
+            if (todoItem.IsComplete == false)
+                todoItem.IsComplete = true;
+            else
+                todoItem.IsComplete = false;
             try
             {
                 await _context.SaveChangesAsync();
