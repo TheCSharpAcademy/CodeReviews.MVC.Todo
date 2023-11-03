@@ -19,6 +19,7 @@ function addItem() {
         return;
     } else {
         validationText.style.display = 'none';
+        validationText.innerText = '';
     }
 
     const item = {
@@ -70,6 +71,7 @@ function updateItem() {
         return;
     } else {
         validationText.style.display = 'none';
+        validationText.innerText = '';
     }
 
     const item = {
