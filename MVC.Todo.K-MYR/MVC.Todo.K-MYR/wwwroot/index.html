@@ -7,16 +7,17 @@
     <link href="/css/site.css" rel="stylesheet" />
 </head>
 <body>
-    <div id="main-container" class="container mt-3">
+    <div id="main-container" class="container mt-3 pb-5">
         <main role="main" >
             <div class="d-flex justify-content-center">
-                <h1 class="text-center text-white bg-dark py-2 px-3 rounded-3 m-0">
+                <h1 id="header-title" class="text-center text-black bg-transparent py-2 px-3 mb-5 rounded-3 m-0">
                     Welcome To Your Personal Pinboard
                 </h1>
             </div>
-            <div class="d-flex flex-wrap mt-5">
+            <div id="pinboard-container" class="d-flex flex-wrap mt-5 mb-5">
                 <div class="postIt-container m-3">
                     <img class="pin" src="/img/Drawing-Pin-scaled.png" alt="Pinboard pin" />
+                    <img class="checkmark" src="/img/checkmark.png" alt="Completed Task Check Mark" />
                     <div class="postIt">
                         <h4 class="text-center px-2 my-2 text-truncate">
                             This i my first Task
@@ -26,72 +27,13 @@
                             This is a more wordy description of the task i have to finish
                         </p>
                     </div>
-                </div>
-                <div class="postIt-container m-3">
-                    <img class="pin" src="/img/Drawing-Pin-scaled.png" alt="Pinboard pin" />
-                    <div class="postIt">
-                        <h4 class="text-center px-2 my-2 text-truncate">
-                            This i my first Task
-                        </h4>
-                        <hr class="mx-2 my-3" />
-                        <p class="postIt-body mx-3 ">
-                            This is a more wordy description of the task i have to finish
-                        </p>
-                    </div>
-                </div>
-                <div class="postIt-container m-3">
-                    <img class="pin" src="/img/Drawing-Pin-scaled.png" alt="Pinboard pin" />
-                    <div class="postIt">
-                        <h4 class="text-center px-2 my-2 text-truncate">
-                            This i my first Task
-                        </h4>
-                        <hr class="mx-2 my-3" />
-                        <p class="postIt-body mx-3 ">
-                            This is a more wordy description of the task i have to finish
-                        </p>
-                    </div>
-                </div>
-                <div class="postIt-container m-3">
-                    <img class="pin" src="/img/Drawing-Pin-scaled.png" alt="Pinboard pin" />
-                    <div class="postIt">
-                        <h4 class="text-center px-2 my-2 text-truncate">
-                            This i my first Task
-                        </h4>
-                        <hr class="mx-2 my-3" />
-                        <p class="postIt-body mx-3 ">
-                            This is a more wordy description of the task i have to finish
-                        </p>
-                    </div>
-                </div>
-                <div class="postIt-container m-3">
-                    <img class="pin" src="/img/Drawing-Pin-scaled.png" alt="Pinboard pin" />
-                    <div class="postIt">
-                        <h4 class="text-center px-2 my-2 text-truncate">
-                            This i my first Task
-                        </h4>
-                        <hr class="mx-2 my-3" />
-                        <p class="postIt-body mx-3 ">
-                            This is a more wordy description of the task i have to finish
-                        </p>
-                    </div>
-                </div>
-                <div class="postIt-container m-3">
-                    <img class="pin" src="/img/Drawing-Pin-scaled.png" alt="Pinboard pin" />
-                    <div class="postIt">
-                        <h4 class="text-center px-2 my-2 text-truncate">
-                            This i my first Task
-                        </h4>
-                        <hr class="mx-2 my-3" />
-                        <p class="postIt-body mx-3 ">
-                            This is a more wordy description of the task i have to finish
-                        </p>
-                    </div>
-                </div>
+                </div>                  
             </div>
         </main>
     </div>
 
     <script src="/lib/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/lib/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/index.js"></script>
 </body>
 </html>
