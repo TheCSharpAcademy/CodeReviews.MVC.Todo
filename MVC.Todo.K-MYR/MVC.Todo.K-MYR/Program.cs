@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using MVC.Todo.K_MYR.Data;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer")));
-builder.Services.AddControllers();
-
+builder.Services.AddControllers().AddNewtonsoftJson(); ;
 
 var app = builder.Build();
 

@@ -4,22 +4,28 @@
     }
 }
 
+@font-face {
+    font-family: 'Handlee';
+    src: url('/fonts/Handlee-Regular.ttf') format('truetype');
+}
+
 body {
-    background-color: #d8b136;
+    font-family: Handlee, sans-serif;
     font-size: 1.5rem;
-    background-image: url("/img/bulletin-board.jpg");
+    font-weight: 500;
+    background-image: url("/img/pinboard.jpg");
     background-size: cover;
     background-position: top;
     background-repeat: repeat;
 }
 
+h4 {
+    font-weight: 900;
+}
+
 ::-webkit-scrollbar {
     display: none;
     width: 5px; 
-}
-
-.postIt-container:not(:has(img.show)):hover ::-webkit-scrollbar {
-    display:block;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -28,30 +34,42 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background-color: #f8f9fa; /* Color of the track */
+    background-color: #f8f9fa; /* Color of the track */    
 }
 
+.header {
+    position: relative;
+    background-image: url('/img/tag.png'); /* Replace with the actual path to your image */
+    background-size: 100% 100%;
+    background-position: top;
+    background-repeat: no-repeat;    
+}
 
 #header-title {
-    font-weight: bold;
-    font-style: oblique
+    padding-top: 40px;
+    color: gold;
+    z-index: 1;
+    font-weight: 900;
 }
 
 .postIt-container {
     position: relative;
-    background-color: #feff9c;
     width: 300px;
     height: 300px;
-    box-shadow: 5px 6px 25px 0px #353839;
-    transition: transform ease 0.5s;
+    box-shadow: 5px 5px 20px 0px #353839;
+    transition: ease 0.5s;
 }
 
-.postIt-container:not(:has(img.checkmark:hover)):hover {
-    box-shadow: 5px 6px 25px 0px #a9a9a9;
-    transform: scale(1.02, 1.02);
+.postIt-container:hover {
+    box-shadow: 5px 5px 15px 0px #a9a9a9;
+    scale: 1.02;
 }
 
-.postIt-container:hover .checkmark {    
+.postIt-container:not(:has(img.show)):hover ::-webkit-scrollbar {
+    display: block;
+}
+
+.postIt-container:hover .checkmark {
     opacity: 1;
 }
 
@@ -66,14 +84,21 @@ body {
 }
 
 .checkmark:hover {    
-    transform: scale(1.20,1.20)
+    transform: scale(1.20);
+    cursor: pointer;
 }
 
 .pin {
     transform: scale(0.7);
+    transition: linear 0.3s;
     position: absolute;
     top: -20px;
     left: 100px;
+}
+
+.pin:hover {
+    transform: scale(0.95);
+    cursor: pointer;
 }
 
 .postIt {

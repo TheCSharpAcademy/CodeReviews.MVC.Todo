@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVC.Todo.K_MYR.Data;
@@ -81,6 +82,46 @@ public class TodosController : ControllerBase
             
         }
         catch(DbUpdateConcurrencyException) when (!TodoExists(todo.Id))
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpPatch("id")]
+    public async Task<ActionResult> PatchTodo([FromRoute]int id, [FromBody] JsonPatchDocument<TodoTaskPostModel> patchDoc)
+    {
+        if(patchDoc is null)
+            return BadRequest();
+
+        var todo = await _context.Todos.FindAsync(id);
+
+        if (todo is null)
+            return NotFound();
+
+        TodoTaskPostModel todoToPatch = new()
+        {
+            Name = todo.Name,
+            Description = todo.Description,
+            Group = todo.Group,
+            IsCompleted = todo.IsCompleted
+        };
+
+        patchDoc.ApplyTo(todoToPatch, ModelState);
+
+        if(!ModelState.IsValid)       
+            return BadRequest();        
+
+        todo.Name = todoToPatch.Name;
+        todo.Description = todoToPatch.Description;
+        todo.Group = todoToPatch.Group;
+        todo.IsCompleted = !todoToPatch.IsCompleted;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+        catch (DbUpdateConcurrencyException) when (!TodoExists(todo.Id))
         {
             return NotFound();
         }
