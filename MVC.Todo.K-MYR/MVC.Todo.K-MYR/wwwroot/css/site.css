@@ -11,7 +11,7 @@
 
 body {
     font-family: Handlee, sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: 500;
     background-image: url("/img/pinboard.jpg");
     background-size: cover;
@@ -20,12 +20,13 @@ body {
 }
 
 h4 {
+    font-size: 1.8rem;
     font-weight: 900;
 }
 
 ::-webkit-scrollbar {
     display: none;
-    width: 5px; 
+    width: 8px; 
 }
 
 ::-webkit-scrollbar-thumb {
@@ -34,12 +35,12 @@ h4 {
 }
 
 ::-webkit-scrollbar-track {
-    background-color: #f8f9fa; /* Color of the track */    
+    background-color: #f8f9fa; 
 }
 
 .header {
     position: relative;
-    background-image: url('/img/tag.png'); /* Replace with the actual path to your image */
+    background-image: url('/img/tag.png');
     background-size: 100% 100%;
     background-position: top;
     background-repeat: no-repeat;    
@@ -52,20 +53,58 @@ h4 {
     font-weight: 900;
 }
 
+.addPostIt-container {
+    width: 300px;
+    height: 300px;
+    animation: slidein 1s ease-out;
+}
+
+.addPostIt {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    border: 10px solid #800000;
+    border-radius: 50px;
+    transition: transform ease 0.5s, box-shadow ease 0.5s;
+    box-shadow: 4px 4px 15px 0px #353839;    
+}
+
+.addPostIt:hover {
+    box-shadow: 0px 0px 15px 0px #a9a9a9;
+    transform:  scale(1.05);
+    cursor: pointer;
+}
+
+.plus {
+    margin: 20%;
+    width: 100%;
+}
+
 .postIt-container {
+    margin: 1rem;
     position: relative;
     width: 300px;
     height: 300px;
-    box-shadow: 5px 5px 20px 0px #353839;
-    transition: ease 0.5s;
+    box-shadow: 4px 4px 15px 0px #353839;
+    transition: scale ease 0.5s, box-shadow ease 0.5s;
+    rotate: var(--rot);
+    background-color: var(--bg-col);
+}
+
+.postIt-container.fadeIn {
+    animation: slidein 1s ease-out;
+}
+
+.postIt-container.fallDown {
+    animation: fallDown 1s ease-out;
 }
 
 .postIt-container:hover {
-    box-shadow: 5px 5px 15px 0px #a9a9a9;
-    scale: 1.02;
+    box-shadow: 0px 0px 15px 0px #a9a9a9;
+    scale: 1.02; 
 }
-
-.postIt-container:not(:has(img.show)):hover ::-webkit-scrollbar {
+ 
+.postIt-container:hover ::-webkit-scrollbar {
     display: block;
 }
 
@@ -73,9 +112,13 @@ h4 {
     opacity: 1;
 }
 
-.checkmark {    
+.postIt-container:has(.postIt-body:hover) .checkmark {
+    opacity: 0;
+}
+
+.checkmark {
     position: absolute;
-    width: 190px;
+    width: 180px;
     top: 95px;
     left: 68px;
     z-index: 1;
@@ -112,6 +155,54 @@ h4 {
     max-height: 180px;
 }
 
+.modal-title {
+    font-weight: 900 !important;
+}
+
 .show {     
     opacity: 1;    
+}
+
+@keyframes slidein {
+    0% {
+        width: 0px;
+        scale: 1.5;
+        opacity: 0;
+    }
+
+    40% {
+        width: 300px;
+        opacity: 0;
+    }
+
+    100% {
+        scale: 1;
+        opacity: 1;        
+    }
+}
+
+@keyframes fallDown {
+    0% {
+        transform: rotateZ(0deg);        
+        top: 0;
+        opacity: 1;
+    }
+
+    25% {
+        transform: rotateZ(-15deg);
+        width: 300px;
+    }
+
+    80% {
+        top: 300px;        
+        transform: rotateZ(-5deg);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+        width: 0;
+        margin: 0;
+        padding: 0;
+    }
 }

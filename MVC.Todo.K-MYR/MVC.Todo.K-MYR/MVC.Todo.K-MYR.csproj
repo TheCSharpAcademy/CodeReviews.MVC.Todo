@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\html\" />
-    <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

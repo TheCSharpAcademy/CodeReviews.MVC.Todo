@@ -87,7 +87,7 @@ public class TodosController : ControllerBase
         }
     }
 
-    [HttpPatch("id")]
+    [HttpPatch("{id}")]
     public async Task<ActionResult> PatchTodo([FromRoute]int id, [FromBody] JsonPatchDocument<TodoTaskPostModel> patchDoc)
     {
         if(patchDoc is null)
@@ -114,7 +114,7 @@ public class TodosController : ControllerBase
         todo.Name = todoToPatch.Name;
         todo.Description = todoToPatch.Description;
         todo.Group = todoToPatch.Group;
-        todo.IsCompleted = !todoToPatch.IsCompleted;
+        todo.IsCompleted = todoToPatch.IsCompleted;
 
         try
         {

@@ -1,4 +1,6 @@
-﻿namespace MVC.Todo.K_MYR.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MVC.Todo.K_MYR.Models;
 
 public class TodoTask
 {
