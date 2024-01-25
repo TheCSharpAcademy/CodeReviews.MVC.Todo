@@ -26,23 +26,22 @@ public static class SeedData
                 new TodoTask
                 {
                     Name = "Weight Training",
-                    IsCompleted = true,
+                    IsCompleted = false,
                     Group = "Exercise",
                     Description = "I ll go to the gym and finish a push workout"
                 },
                 new TodoTask
                 {
                     Name = "Do homework",
-                    IsCompleted = true,
+                    IsCompleted = false,
                     Group = "School",
                     Description = "i will do my homework so i can play games afterwards for the rest of the day"
                 },
                 new TodoTask
                 {
-                    Name = "This is a test fro really long text This is a test fro really long text This is a test fro really long text ",
+                    Name = "Finish Todo Proj",
                     IsCompleted = true,
-                    Group = "School",
-                    Description = "This is a test fro really long text This is a test fro really long text This is a test fro really long text This is a test fro really long text This is a test fro really long text This is a test fro really long text This is a test fro really long text This is a test fro really long text This is a test fro really long text y"
+                    Group = "Programming"                    
                 }
             );
         }

@@ -13,13 +13,13 @@ body {
     font-family: Handlee, sans-serif;
     font-size: 1.7rem;
     font-weight: 500;
-    background-image: url("/img/pinboard.jpg");
+    background-image: url("/img/pinboard-adjusted.jpg");
     background-size: cover;
     background-position: top;
     background-repeat: repeat;
 }
 
-h4 {
+h4, h5 {
     font-size: 1.8rem;
     font-weight: 900;
 }
@@ -40,17 +40,18 @@ h4 {
 
 .header {
     position: relative;
-    background-image: url('/img/tag.png');
-    background-size: 100% 100%;
+    background-image: url('/img/sign.png');
+    background-size: 85% 100%;
     background-position: top;
     background-repeat: no-repeat;    
 }
 
 #header-title {
     padding-top: 40px;
-    color: gold;
+    color: black;
     z-index: 1;
     font-weight: 900;
+    font-size: 3rem;
 }
 
 .addPostIt-container {
@@ -81,7 +82,7 @@ h4 {
 }
 
 .postIt-container {
-    margin: 1rem;
+    margin: 16px;
     position: relative;
     width: 300px;
     height: 300px;
@@ -108,12 +109,41 @@ h4 {
     display: block;
 }
 
+.postIt-container:hover .pencil,
 .postIt-container:hover .checkmark {
     opacity: 1;
 }
 
 .postIt-container:has(.postIt-body:hover) .checkmark {
     opacity: 0;
+}
+
+.pin {
+    transform: scale(0.7);
+    transition: ease-out 0.3s;
+    position: absolute;
+    top: -20px;
+    left: 100px;
+}
+
+.pin:hover {
+    transform: scale(0.90);
+    cursor: pointer;
+}
+
+.pencil {
+    width: 30px;
+    position: absolute;
+    opacity: 1;
+    top: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: opacity ease-in 0.5s, transform ease 0.5s;
+}
+
+.pencil:hover {
+    cursor: pointer;
+    transform: scale(1.2);
 }
 
 .checkmark {
@@ -123,24 +153,11 @@ h4 {
     left: 68px;
     z-index: 1;
     opacity: 0;
-    transition: transform ease 0.5s, opacity ease 0.7s;
+    transition: transform ease 0.5s, opacity ease-in 0.5s;
 }
 
 .checkmark:hover {    
     transform: scale(1.20);
-    cursor: pointer;
-}
-
-.pin {
-    transform: scale(0.7);
-    transition: linear 0.3s;
-    position: absolute;
-    top: -20px;
-    left: 100px;
-}
-
-.pin:hover {
-    transform: scale(0.95);
     cursor: pointer;
 }
 
@@ -153,10 +170,60 @@ h4 {
     hyphens: auto;
     text-align: center;
     max-height: 180px;
+    overflow-wrap: break-word;
+}
+
+.modal-header {
+    position: relative;
 }
 
 .modal-title {
     font-weight: 900 !important;
+}
+
+.btn-close {
+    position: absolute;
+    right: 4%;    
+}
+
+.form-control {
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+.control-label {
+    font-weight: 600;
+}
+
+#title_add-error {
+    font-size: 1rem;
+    color: red;
+}
+
+#title_edit-error {
+    font-size: 1rem;
+    color: red;
+}
+
+#description_add-error {
+    font-size: 1rem;
+    color: red;
+}
+
+#description_edit-error {
+    font-size: 1rem;
+    color: red;
+}
+
+.modal-btn {
+    background-color: black;
+    color: white;
+    font-size: 1.3rem;
+}
+
+.modal-btn:hover {
+    background-color: #00b5ff;
+    color: gold;
 }
 
 .show {     
@@ -182,7 +249,8 @@ h4 {
 }
 
 @keyframes fallDown {
-    0% {
+    0% {        
+        z-index: 4;
         transform: rotateZ(0deg);        
         top: 0;
         opacity: 1;
@@ -190,11 +258,13 @@ h4 {
 
     25% {
         transform: rotateZ(-15deg);
-        width: 300px;
     }
 
-    80% {
-        top: 300px;        
+    60% {
+        top: 300px;
+        width: 300px;
+        margin: 16px;
+        padding: 0 12px;
         transform: rotateZ(-5deg);
         opacity: 0;
     }
