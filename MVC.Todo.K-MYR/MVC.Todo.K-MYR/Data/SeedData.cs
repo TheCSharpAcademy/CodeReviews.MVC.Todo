@@ -5,8 +5,8 @@ namespace MVC.Todo.K_MYR.Data;
 public static class SeedData
 {
     public static void Initialize(DatabaseContext db)
-    {        
-        if(!db.Todos.Any())
+    {
+        if (!db.Todos.Any())
         {
             db.Todos.AddRange(
                 new TodoTask
@@ -41,10 +41,10 @@ public static class SeedData
                 {
                     Name = "Finish Todo Proj",
                     IsCompleted = true,
-                    Group = "Programming"                    
+                    Group = "Programming"
                 }
             );
         }
-        db.SaveChangesAsync();    
+        db.SaveChangesAsync();
     }
 }

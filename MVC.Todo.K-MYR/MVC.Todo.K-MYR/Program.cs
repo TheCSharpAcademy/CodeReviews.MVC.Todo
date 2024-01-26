@@ -1,19 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using MVC.Todo.K_MYR.Data;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer")));
-builder.Services.AddControllers().AddNewtonsoftJson(); ;
+builder.Services.AddControllers().AddNewtonsoftJson();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope()) 
 {
     var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
-    if(builder.Configuration.GetValue<bool>("Auto-Migrate"))
+    if (builder.Configuration.GetValue<bool>("Auto-Migrate"))
         db.Database.Migrate();
     if (builder.Configuration.GetValue<bool>("SeedData"))
         SeedData.Initialize(db);

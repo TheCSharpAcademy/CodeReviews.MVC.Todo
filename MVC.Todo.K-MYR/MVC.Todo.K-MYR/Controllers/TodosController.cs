@@ -22,7 +22,7 @@ public class TodosController : ControllerBase
     public async Task<ActionResult<IEnumerable<TodoTask>>> GetTodos() => Ok(await _context.Todos.ToListAsync());
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<TodoTask>> GetTodo([FromRoute]int id)
+    public async Task<ActionResult<TodoTask>> GetTodo([FromRoute] int id)
     {
         var todo = await _context.Todos.FindAsync(id);
 
@@ -30,7 +30,7 @@ public class TodosController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> PostTodo([FromBody]TodoTaskPostModel todoInput)
+    public async Task<ActionResult> PostTodo([FromBody] TodoTaskPostModel todoInput)
     {
         if (!ModelState.IsValid)
             return BadRequest();
@@ -50,24 +50,24 @@ public class TodosController : ControllerBase
 
             return CreatedAtAction(nameof(GetTodo), new { id = todo.Id }, todo);
         }
-        catch (DbUpdateConcurrencyException) when (!TodoExists(todo.Id)) 
+        catch (DbUpdateConcurrencyException) when (!TodoExists(todo.Id))
         {
             return NotFound();
-        }   
+        }
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> PutTodo([FromRoute]int id, [FromBody]TodoTask todoInput)
+    public async Task<ActionResult> PutTodo([FromRoute] int id, [FromBody] TodoTask todoInput)
     {
         if (id != todoInput.Id)
             return BadRequest();
-        
-        if(!ModelState.IsValid)
+
+        if (!ModelState.IsValid)
             return BadRequest();
 
         var todo = await _context.Todos.FindAsync(id);
 
-        if(todo is null)
+        if (todo is null)
             return NotFound();
 
         todo.Name = todoInput.Name;
@@ -79,18 +79,18 @@ public class TodosController : ControllerBase
         {
             await _context.SaveChangesAsync();
             return NoContent();
-            
+
         }
-        catch(DbUpdateConcurrencyException) when (!TodoExists(todo.Id))
+        catch (DbUpdateConcurrencyException) when (!TodoExists(todo.Id))
         {
             return NotFound();
         }
     }
 
     [HttpPatch("{id}")]
-    public async Task<ActionResult> PatchTodo([FromRoute]int id, [FromBody] JsonPatchDocument<TodoTaskPostModel> patchDoc)
+    public async Task<ActionResult> PatchTodo([FromRoute] int id, [FromBody] JsonPatchDocument<TodoTaskPostModel> patchDoc)
     {
-        if(patchDoc is null)
+        if (patchDoc is null)
             return BadRequest();
 
         var todo = await _context.Todos.FindAsync(id);
@@ -108,8 +108,8 @@ public class TodosController : ControllerBase
 
         patchDoc.ApplyTo(todoToPatch, ModelState);
 
-        if(!ModelState.IsValid)       
-            return BadRequest();        
+        if (!ModelState.IsValid)
+            return BadRequest();
 
         todo.Name = todoToPatch.Name;
         todo.Description = todoToPatch.Description;
@@ -128,7 +128,7 @@ public class TodosController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteTodo([FromRoute]int id)
+    public async Task<ActionResult> DeleteTodo([FromRoute] int id)
     {
         var todo = await _context.Todos.FindAsync(id);
 
@@ -149,5 +149,4 @@ public class TodosController : ControllerBase
     }
 
     private bool TodoExists(int id) => _context.Todos.Find(id) is not null;
-    
 }

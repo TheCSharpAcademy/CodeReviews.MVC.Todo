@@ -9,6 +9,6 @@ public class TodoTask
     public string? Name { get; set; }
     [StringLength(250)]
     public string? Description { get; set; }
-    public string? Group { get; set; }    
+    public string? Group { get; set; }
     public bool IsCompleted { get; set; }
 }

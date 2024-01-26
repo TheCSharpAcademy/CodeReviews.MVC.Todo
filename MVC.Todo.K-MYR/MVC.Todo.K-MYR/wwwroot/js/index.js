@@ -1,4 +1,5 @@
 ﻿const uri = "https://localhost:7055/Todos";
+const animationContainer = document.getElementById("animation-container");
 const pinboard = document.getElementById("pinboard-container");
 const addPostIt = document.getElementById("addPostIt");
 const addModal = document.getElementById("addTodo");
@@ -14,21 +15,21 @@ const pencilTransformScaling = "scale(1.40)";
 document.addEventListener("DOMContentLoaded", function () {
     getTodos();
 
-    $("#addForm").validate({           
+    $("#addForm").validate({
         rules: {
             title_add: {
                 required: true,
                 minlength: 1,
                 maxlength: 50
             },
-            description_add: {                               
+            description_add: {
                 maxlength: 250
             }
         },
         submitHandler: function (form) {
-            const data = new FormData(form); 
+            const data = new FormData(form);
             addTodo(data.get('title_add'), data.get('description_add'));
-            $("#addTodo").modal('hide');            
+            $("#addTodo").modal('hide');
             $("#title_add").val("");
             $("#description_add").val("");
         }
@@ -47,12 +48,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         },
         submitHandler: function (form) {
-            const data = new FormData(form);            
-            updateTodo(data.get('id_edit'), data.get('title_edit'), data.get('description_edit'));                   
+            const data = new FormData(form);
+            updateTodo(data.get('id_edit'), data.get('title_edit'), data.get('description_edit'));
             $("#editTodo").modal('hide');
             $("#title_edit").val("");
             $("#description_edit").val("");
-            $("#id_edit").val(""); 
+            $("#id_edit").val("");
         }
     });
 });
@@ -95,20 +96,20 @@ async function addTodo(title, description) {
         const response = await fetch(`${uri}`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",                
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({ Name: title, Description: description })
         });
 
         if (!response.ok) {
-            console.error(`HTTP Post Error: ${response.status}`);            
+            console.error(`HTTP Post Error: ${response.status}`);
         }
 
         const postItElement = createPostItElement(await response.json());
-        pinboard.insertBefore(postItElement, addPostIt);        
+        pinboard.insertBefore(postItElement, addPostIt);
 
     } catch (error) {
-        console.error(error);       
+        console.error(error);
     };
 }
 
@@ -126,7 +127,7 @@ async function patchTodo(patchDoc, id) {
             console.error(`HTTP Patch Error: ${response.status}`);
             return false;
         }
-        
+
         return true;
 
     } catch (error) {
@@ -137,10 +138,10 @@ async function patchTodo(patchDoc, id) {
 
 async function updateTodo(id, title, description) {
     try {
-        const todo = await getTodo(id);    
+        const todo = await getTodo(id);
         todo.name = title;
         todo.description = description;
-        
+
         const response = await fetch(`${uri}/${id}`, {
             method: "PUT",
             headers: {
@@ -167,14 +168,14 @@ async function updateTodo(id, title, description) {
 async function deleteTodo(id) {
     try {
         const response = await fetch(`${uri}/${id}`, {
-            method: "DELETE"  
+            method: "DELETE"
         });
 
         if (!response.ok) {
             console.error(`HTTP Delete Error: ${response.status}`);
             return false;
         }
-        
+
         return true;
 
     } catch (error) {
@@ -193,11 +194,11 @@ function displayTodos(data) {
 function createPostItElement(item) {
     const rotation = Math.floor(randNum(rotationLimit, - rotationLimit) * 100) / 100;
     const pinColor = pinColors[Math.round(randNum(0, pinColors.length - 1))];
-    const postItColor = postItColors[Math.round(randNum(0, postItColors.length - 1))];    
+    const postItColor = postItColors[Math.round(randNum(0, postItColors.length - 1))];
 
     const postItContainer = document.createElement('div');
     postItContainer.id = `postIt_${item.id}`;
-    postItContainer.classList.add('postIt-container', 'fadeIn');    
+    postItContainer.classList.add('postIt-container', 'fadeIn');
     postItContainer.style = `--rot: ${rotation}deg; --bg-col: ${postItColor}`;
 
     const pinImage = document.createElement('img');
@@ -211,7 +212,7 @@ function createPostItElement(item) {
     editImage.alt = 'Pencil icon';
     editImage.setAttribute("data-bs-toggle", "modal");
     editImage.setAttribute("data-bs-target", "#editTodo");
-    
+
 
     const checkmarkImage = document.createElement('img');
     checkmarkImage.classList.add('checkmark');
@@ -225,7 +226,7 @@ function createPostItElement(item) {
     const postIt = document.createElement('div');
     postIt.classList.add('postIt');
 
-    const heading = document.createElement('h4');    
+    const heading = document.createElement('h4');
     heading.classList.add('heading', 'text-center', 'px-2', 'my-2', 'text-truncate');
     heading.textContent = item.name ?? '';
 
@@ -249,11 +250,14 @@ function createPostItElement(item) {
         $("#id_edit").val(item.id);
     });
     checkmarkImage.addEventListener('click', async function () {
-        const checkTransform = this.style.transform;
-        this.style.transform = checkTransformScaling;
-        setTimeout(() => {
-            this.style.transform = checkTransform;
-        }, 180);
+        anime({
+            targets: checkmarkImage,
+            easing: 'easeOutCubic',
+            scale: [1, 2],
+            duration: 150,
+            direction: 'alternate',
+            autoplay: true
+        });
         try {
             const todo = await getTodo(item.id);
             const isSuccess = await patchTodo(
@@ -269,6 +273,7 @@ function createPostItElement(item) {
                 if (todo.isCompleted) {
                     this.classList.remove('show');
                 } else {
+                    animateStars(postItContainer);
                     this.classList.add('show');
                 }
             }
@@ -276,23 +281,28 @@ function createPostItElement(item) {
             console.error(error);
         }
     });
+
     pinImage.addEventListener('click', async function () {
         const pinTransform = this.style.transform;
         this.style.transform = pinTransformScaling;
         setTimeout(() => {
             this.style.transform = pinTransform;
         }, 180);
+
         try {
             const isSuccess = await deleteTodo(item.id);
 
             if (isSuccess) {
                 postItContainer.classList.remove('fadeIn');
                 postItContainer.classList.add('fallDown');
-                setTimeout(() => { pinboard.removeChild(postItContainer) }
-                    , 1000);
-            }
+            };
         } catch (error) {
             console.error(error);
+        }
+    });
+    postItContainer.addEventListener('animationend', function (e) {
+        if (e.animationName == 'fallDown') {
+            this.remove();
         }
     });
 
@@ -303,9 +313,73 @@ function createPostItElement(item) {
     postItContainer.appendChild(pinImage);
     postItContainer.appendChild(editImage);
     postItContainer.appendChild(checkmarkImage);
-    postItContainer.appendChild(postIt);   
+    postItContainer.appendChild(postIt);
 
     return postItContainer;
+}
+
+async function animateStars(elem) {
+    const rect = elem.getBoundingClientRect();
+    const stars = createStars();
+    anime.set(stars, {
+        left: (rect.left + 150) + "px",
+        top: (rect.top + 150) + "px",
+        opacity: 1
+    });
+    anime.timeline()
+        .add({
+            targets: stars,
+            easing: 'linear',
+            translateX: {
+                value: [0, (el, i) => { return anime.random(20, 60) * Math.pow(-1, i) }
+                ],
+                easing: 'linear'
+            },
+            translateY: {
+                value: [0, - anime.random(100, 150)],
+                easing: 'easeOutSine'
+            },
+            loop: false,
+            duration: 300
+        })
+        .add({
+            targets: stars,
+            opacity: {
+                value: [0.8, 0],
+                easing: 'easeInExpo'
+            },
+            translateX: {
+                value: (el, i) => { return '+=' + (anime.random(60, 140) * Math.pow(-1, i)) }
+                ,
+                easing: 'linear'
+            },
+            translateY: {
+                value: '+=' + anime.random(500, 700),
+                easing: 'easeInSine'
+            },
+            loop: false,
+            duration: 800
+
+        }).finished.then(() => {
+            for (let i = 0; i < stars.length; i++) {
+                animationContainer.removeChild(stars[i])
+            }
+        });
+}
+
+function createStars() {
+    const classes = ['star-xl', 'star-xl', 'star-md', 'star-md', 'star-sm', 'star-sm', 'star-sm'];
+    let stars = [];
+
+    for (let i = 0; i < classes.length; i++) {
+        const star = document.createElement('img');
+        star.src = "/img/star.svg";
+        star.classList.add('star', classes[i]);
+        animationContainer.appendChild(star);
+        stars.push(star);
+    }
+
+    return stars;
 }
 
 function randNum(min, max) {
