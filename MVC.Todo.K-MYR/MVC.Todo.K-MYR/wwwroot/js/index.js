@@ -101,12 +101,13 @@ async function addTodo(title, description) {
             body: JSON.stringify({ Name: title, Description: description })
         });
 
-        if (!response.ok) {
+        if (response.ok) {
+            const postItElement = createPostItElement(await response.json());
+            pinboard.insertBefore(postItElement, addPostIt);
+        }
+        else {
             console.error(`HTTP Post Error: ${response.status}`);
         }
-
-        const postItElement = createPostItElement(await response.json());
-        pinboard.insertBefore(postItElement, addPostIt);
 
     } catch (error) {
         console.error(error);
@@ -150,15 +151,16 @@ async function updateTodo(id, title, description) {
             body: JSON.stringify(todo)
         });
 
-        if (!response.ok) {
-            console.error(`HTTP Post Error: ${response.status}`);
+        if (response.ok) {
+            const heading = document.getElementById(`postIt_${id}`).querySelector('.heading');
+            const postItBody = document.getElementById(`postIt_${id}`).querySelector('.postIt-body');
+
+            postItBody.textContent = description ?? "";
+            heading.textContent = title ?? "";
         }
-
-        const heading = document.getElementById(`postIt_${id}`).querySelector('.heading');
-        const postItBody = document.getElementById(`postIt_${id}`).querySelector('.postIt-body');
-
-        postItBody.textContent = description ?? "";
-        heading.textContent = title ?? "";
+        else {
+            console.error(`HTTP PUT Error: ${response.status}`);
+        }
 
     } catch (error) {
         console.error(error);
@@ -336,7 +338,8 @@ async function animateStars(elem) {
                 easing: 'linear'
             },
             translateY: {
-                value: [0, - anime.random(100, 150)],
+                value: [0, (el, i) => { return - anime.random(100, 150) }
+                ],
                 easing: 'easeOutSine'
             },
             loop: false,
