@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Pinboard</title>
+    <link href="/lib/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/site.css" rel="stylesheet" />
+    <link rel="icon" href="/img/pin-red-icon.png" />
+</head>
+<body>
+    <div id="animation-container">
+        <main role="main">
+            <div class="header d-flex justify-content-center pb-3 pt-2 pe-1">
+                <h1 id="header-title" class="text-center bg-transparent mb-5 mt-3">
+                    Welcome To Your Personal Pinboard
+                </h1>
+            </div>
+            <div id="main-container" class="container pt-4 pb-5">
+                <div id="pinboard-container" class="d-flex row flex-wrap justify-content-start ">
+                    <div id="addPostIt" class="addPostIt-container d-flex m-3">
+                        <div class="addPostIt my-auto mx-auto" data-bs-toggle="modal" data-bs-target="#addTodo">
+                            <div class="d-flex w-100 h-100 justify-content-center align-items-center border-div">
+                                <img class="plus" src="/img/plus.svg" alt="Plus Sign" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <section id="modals">
+        <div class="modal fade" id="addTodo" tabindex="-1" aria-labelledby="addTodoLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-truncate text-center flex-grow-1" id="addTodoLabel">Add New Post-It</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addForm">
+                            <div class="form-group">
+                                <label class="control-label">Title</label>
+                                <input type="text" id="title_add" name="title_add" class="form-control" />
+                            </div>
+                            <div class="form-group mt-1">
+                                <label class="control-label">Description</label>
+                                <textarea id="description_add" name="description_add" class="form-control" rows="4"></textarea>
+                            </div>
+                            <div class="form-group mt-2 d-flex align-items-center justify-content-center">
+                                <input type="submit" value="Add" class="btn modal-btn px-4" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="editTodo" tabindex="-1" aria-labelledby="editTodoLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-truncate text-center flex-grow-1" id="editTodoLabel"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editForm">
+                            <input type="hidden" id="id_edit" name="id_edit" value="" />
+                            <div class="form-group">
+                                <label class="control-label">Title</label>
+                                <input type="text" id="title_edit" name="title_edit" class="form-control" />
+                            </div>
+                            <div class="form-group mt-1">
+                                <label class="control-label">Description</label>
+                                <textarea type="text" id="description_edit" name="description_edit" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group mt-3 d-flex align-items-center justify-content-center">
+                                <input type="submit" value="Edit" class="btn modal-btn px-4" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="/lib/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/lib/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/lib/node_modules/animejs/lib/anime.min.js"></script>
+    <script src="/js/index.js"></script>
+</body>
+</html>
