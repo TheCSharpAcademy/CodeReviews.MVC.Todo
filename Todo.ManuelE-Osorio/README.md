@@ -25,12 +25,13 @@ In the process of creating the project, the following concepts have been applied
 
 1. Accordion elements
 2. Modal elements
+3. Alerts
 
 ## Todo
 
-1. \~~Refactor api to use Typed Results~~
+1. ~~Refactor api to use Typed Results~~
 2. Prevent Over Posting
-3. \~~Add Map groups~~
+3. ~~Add Map groups~~
 
 ## References
 

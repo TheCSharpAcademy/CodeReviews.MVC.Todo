@@ -78,6 +78,8 @@
         </nav>
     </header>
 
+    <div id="alertTemplate"></div>
+
     <div class="container">
         <main role="main" class="pb-3">
             <ul class="nav nav-tabs">
@@ -131,7 +133,34 @@
               </div>
             </div>
               
- 
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalLabel">Delete?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+  
+                        <form>    
+                            <div class="mb-3">
+                                <input type="hidden" id="todoid" name="id" value="0">
+                            </div>
+                            <div class="input-group mb-3">
+                                <p> Are you sure?</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger" id="inputButton">Delete</button>
+                              </div>
+                        </form>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+
 
             <div class="accordion" id="todoAccordion">          
                 <div class="accordion-item" id="accordionTemplate" hidden>
@@ -153,7 +182,7 @@
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#todoModal" data-bs-id="0" data-bs-title="Update">Update</button>
                             </div>
                             <div class="col-1">
-                                <button type="button" class="btn btn-danger" onclick=""> Delete</button>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-id="0" data-bs-title="Delete"> Delete</button>
                             </div>
                         </div>
                     </h2>
