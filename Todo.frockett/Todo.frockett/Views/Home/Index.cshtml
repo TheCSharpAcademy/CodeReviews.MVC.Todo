@@ -5,22 +5,25 @@
 <div class="text-center">
     <h1>Todo App</h1>
 
-    <div id="todoList">
-        <!-- Todo items will be populated here via JavaScript -->
+    <div id="todoList" class="list">
+        
+
     </div>
 
     <button id="addTodo" onclick="toggleAddForm()">Add Todo</button>
 
-    <div id="addTodoForm" style="display:none;">
+    <div id="addTodoForm" class="form-hidden" style="display:none;">
         <h2>Add New Todo</h2>
         <form action="javascript:void(0);" onsubmit="addItem()">
             <label for="add-name">Todo Name:</label>
             <input type="text" id="add-name" name="add-name" required>
+            <input type="checkbox" id="add-isComplete"> Is Complete
             <input type="submit" value="Add">
+            <input type="button" id="add-cancel" value="Cancel" onclick="cancelAddTodo()">
         </form>
     </div>
 
-    <div id="editForm" style="display:none;">
+    <div id="editForm" class="form-hidden" style="display:none;">
         <h3>Edit Todo</h3>
         <form action="javascript:void(0);" onsubmit="updateItem()">
             <input type="hidden" id="edit-id">
@@ -34,10 +37,11 @@
 
 <div id="deleteModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <p>Are you sure you want to delete this todo?</p>
-        <button onclick="confirmDelete()">Yes, Delete it</button>
-        <button onclick="closeModal()">Cancel</button>
+        <p class="modal-prompt">Are you sure you want to delete this todo: "<span id='todoNameToDelete'></span>"?</p>
+        <div class="modal-buttons">
+            <button class="modal-button" onclick="confirmDelete()">Confirm</button>
+            <button class="modal-button" onclick="closeModal()">Cancel</button>
+        </div>
     </div>
 </div>
 
