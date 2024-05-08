@@ -1,6 +1,4 @@
-/**{
-    border: 1px solid red;
-}*/
+
 
 @media (min-width: 768px) {
   html {
@@ -17,39 +15,45 @@ html {
   min-height: 100%;
 }
 
+
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    padding: 20em;
+    background-color: #f2f2f2;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: #36454F;
 }
 
 .list {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
+    margin-top: 25px;
 }
 
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    display: none; 
+    position: fixed; 
+    z-index: 1;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
+    padding: 20em;
+    width: 100%;
+    height: 100%; 
+    overflow: auto;
     border-radius: 20px;
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
 }
 
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 15% auto; 
     padding: 10px;
     display: flex;
     flex-direction: column;
     border: 1px solid #888;
-    width: 40%; /* Could be more or less, depending on screen size */
+    width: 40%; 
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -95,17 +99,15 @@ body {
 }
 
 button {
-    padding: 5px 10px; /* Padding inside the buttons */
-    cursor: pointer; /* Pointer cursor on hover */
+    padding: 5px 10px;  Padding inside the buttons 
+    cursor: pointer;  Pointer cursor on hover 
     border-radius: 10px;
     border: none;
 }
 
 button:hover{
     color: darkgray;
-
 }
-
 
 .form-hidden {
     margin-top: 20px;
