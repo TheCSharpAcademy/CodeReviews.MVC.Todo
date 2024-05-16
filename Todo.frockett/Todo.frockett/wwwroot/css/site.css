@@ -1,0 +1,115 @@
+
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+
+body {
+    margin-bottom: 60px;
+    padding: 20em;
+    background-color: #f2f2f2;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: #36454F;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1;
+    left: 0;
+    top: 0;
+    padding: 20em;
+    width: 100%;
+    height: 100%; 
+    overflow: auto;
+    border-radius: 20px;
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #888;
+    width: 40%; 
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.modal-prompt {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: left;
+}
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+/* The Buttons */
+.todo-item {
+    display: flex;
+    width: 500px;
+    justify-content: space-between;
+    align-items: center; /* Align items vertically */
+    margin-bottom: 10px; /* Space between todo items */
+}
+
+.todo-name {
+    margin-left: 70px;
+
+}
+
+.button-container {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+}
+
+button {
+    padding: 5px 10px;  Padding inside the buttons 
+    cursor: pointer;  Pointer cursor on hover 
+    border-radius: 10px;
+    border: none;
+}
+
+button:hover{
+    color: darkgray;
+}
+
+.form-hidden {
+    margin-top: 20px;
+}
+

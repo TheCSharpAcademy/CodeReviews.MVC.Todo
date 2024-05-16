@@ -475,3 +475,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/Todo.frockett/Todo.frockett/todos.db
+/Todo.frockett/Todo.frockett/todos.db-shm
+/Todo.frockett/Todo.frockett/todos.db-wal
+/Todo.frockett/Todo.frockett/Todo.frockett.http
