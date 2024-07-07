@@ -4,15 +4,23 @@ button {
   font-size: 14px;
 }
 
-.create-row td,
-tr th {
-  background-color: darkslategray;
-}
-
-tr {
-  vertical-align: middle;
-}
-
 input {
   margin-bottom: 0 !important;
+}
+
+.completed-marker-row td {
+  background-color: darkgreen;
+}
+
+.incomplete-marker-row td {
+  background-color: darkgoldenrod;
+}
+
+.overdue {
+  color: darkgoldenrod;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
 }

@@ -23,7 +23,11 @@ todos.MapPost("/", async Task<Created<Todo>> (TodoCreateDto todoCreateDto, TodoD
     return TypedResults.Created($"/todos/{todo.Id}", todo);
 });
 
-todos.MapGet("/", async Task<Ok<List<Todo>>> (TodoDb db) => TypedResults.Ok(await db.Todos.ToListAsync()));
+todos.MapGet("/", async Task<Ok<List<Todo>>> (TodoDb db) =>
+    TypedResults.Ok(
+        await db.Todos.OrderBy(t => t.IsComplete).ToListAsync()
+    )
+);
 
 todos.MapGet("/{id}", async Task<Results<Ok<Todo>, NotFound>> (int id, TodoDb db) =>
     await db.Todos.FindAsync(id) is Todo todo ?

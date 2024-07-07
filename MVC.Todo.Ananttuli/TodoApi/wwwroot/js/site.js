@@ -1,195 +1,122 @@
-const uri = "/todos";
+import { Api } from "./api.js";
+import { Ui } from "./ui.js";
 
-async function render() {
-  const todos = await fetchAll();
+renderTodos();
+
+async function renderTodos() {
+  const todos = await Api.fetchAll();
   const tableBody = document.getElementById("todos");
 
-  const rows = todos.map(createTodoRow);
+  const completedRows = todos
+    .filter((todo) => todo.isComplete)
+    .map(createTodoRow);
+  const incompleteRows = todos
+    .filter((todo) => !todo.isComplete)
+    .map(createTodoRow);
 
   tableBody.innerHTML = "";
 
-  tableBody.append(createTodoCreateRow(), ...rows);
+  const { incompleteMarkerRow, completedMarkerRow } =
+    Ui.createTableSectionHeaderRows(
+      incompleteRows.length,
+      completedRows.length
+    );
+
+  tableBody.append(
+    createTodoCreateRow(),
+    incompleteMarkerRow,
+    ...incompleteRows,
+    completedMarkerRow,
+    ...completedRows
+  );
 }
 
-/**
- * API calls to server
- */
+// ===================== DISPLAY MODE ===================== //
 
-async function postTodo(body) {
-  try {
-    const response = await fetch(`${uri}`, {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
+function createTodoRow(todo) {
+  const row = document.createElement("tr");
 
-    const data = await response.json();
-    return data;
-  } catch {
-    return null;
-  }
+  showRowInDisplayMode(row, todo);
+
+  return row;
 }
 
-async function fetchAll() {
-  const response = await fetch(uri);
-  const data = await response.json();
-  return data;
+function showRowInDisplayMode(row, todo) {
+  const checkboxCell = Ui.createCheckboxCell(todo.isComplete, true);
+
+  const nameCell = Ui.createTextCell(todo.name);
+
+  const dueDateCell = Ui.createDateDisplayCell(
+    todo.dueAt,
+    todo.dueAt && new Date(todo.dueAt) < new Date() && !todo.isComplete
+  );
+
+  const controlsCell = document.createElement("td");
+
+  controlsCell.append(getEditModeButton(row, todo), getDeleteButton(todo.id));
+
+  row.innerHTML = "";
+  row.append(checkboxCell, nameCell, dueDateCell, controlsCell);
 }
 
-async function updateTodo(id, body) {
-  try {
-    const response = await fetch(`${uri}/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(body),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
+// ===================== EDIT MODE ===================== //
 
-    const data = await response.json();
-    return data;
-  } catch {
-    return null;
-  }
+function showRowInEditMode(row, todo) {
+  const cancelButton = Ui.createCancelButton();
+  cancelButton.onclick = () => showRowInDisplayMode(row, todo);
+
+  const saveButton = getSaveButton(row, todo);
+
+  const controlsCell = document.createElement("td");
+  controlsCell.append(saveButton, cancelButton);
+
+  row.innerHTML = "";
+  row.append(...getEditTodoCells(todo), controlsCell);
 }
 
-async function deleteTodo(id) {
-  try {
-    await fetch(`${uri}/${id}`, {
-      method: "DELETE",
-    });
+function getEditTodoCells(todo) {
+  const checkBoxCell = Ui.createCheckboxCell(todo.isComplete, false);
 
-    return true;
-  } catch {
-    return false;
-  }
+  const nameCell = Ui.createTextInputCell(todo.name);
+
+  const dateCell = Ui.createDateInputCell(todo.dueAt);
+
+  return [checkBoxCell, nameCell, dateCell];
 }
 
-/**
- * API callbacks wrappers with UI interactions
- */
-function deleteTodoCallback(id) {
-  return async () => {
+// ===================== BUTTONS LOGIC ===================== //
+
+function getEditModeButton(row, todo) {
+  const editModeButton = Ui.createEnableEditModeButton();
+
+  editModeButton.onclick = () => showRowInEditMode(row, todo);
+
+  return editModeButton;
+}
+
+function getDeleteButton(todoId) {
+  const deleteButton = Ui.createDeleteButton();
+
+  deleteButton.onclick = async () => {
     const confirmed = confirm("Are you sure you want to delete?");
     if (!confirmed) return;
 
-    const success = await deleteTodo(id);
-
+    const success = await Api.deleteTodo(todoId);
     alert(success ? "Deleted" : "Could not delete");
 
-    render();
+    renderTodos();
   };
+
+  return deleteButton;
 }
 
-/**
- *
- * @param {HTMLTableRowElement} row
- */
-function makeRowDisplay(row, todo) {
-  const cells = [
-    document.createElement("td"),
-    document.createElement("td"),
-    document.createElement("td"),
-    document.createElement("td"),
-  ];
-
-  const doneCell = document.createElement("input");
-  doneCell.type = "checkbox";
-  doneCell.checked = todo.isComplete;
-  doneCell.disabled = true;
-
-  cells[0].append(doneCell);
-
-  cells[1].innerText = todo.name;
-
-  if (todo.dueAt) {
-    const dueDate = new Date(todo.dueAt);
-    cells[2].innerText = dueDate.toLocaleDateString();
-
-    const dueDatePassed = dueDate < new Date();
-
-    const dueDateStatusIconClass =
-      dueDatePassed && !todo.isComplete
-        ? '<i class="bi-exclamation-circle-fill"></i> Overdue'
-        : "";
-    const icon = document.createElement("i");
-    icon.setAttribute("class", dueDateStatusIconClass);
-
-    cells[2].appendChild(icon);
-  }
-
-  const editModeButton = document.createElement("button");
-  editModeButton.innerHTML = '<i class="bi bi-pencil-fill"></i>';
-  editModeButton.onclick = () => makeRowEditable(row, todo.id, todo);
-
-  const deleteButton = document.createElement("button");
-  deleteButton.style.backgroundColor = "#dc3545";
-  deleteButton.innerHTML = '<i class="bi bi-trash-fill"></i>';
-  deleteButton.classList.add("secondary");
-  deleteButton.onclick = deleteTodoCallback(todo.id);
-
-  cells[3].append(editModeButton, deleteButton);
-
-  row.innerHTML = "";
-  row.append(...cells);
-}
-
-function createEditTodoCells(todo) {
-  const cells = [
-    document.createElement("td"),
-    document.createElement("td"),
-    document.createElement("td"),
-  ];
-
-  const doneInput = document.createElement("input");
-  doneInput.type = "checkbox";
-  doneInput.checked = !!todo.isComplete;
-
-  const nameInput = document.createElement("input");
-  nameInput.value = todo.name;
-
-  const dateInput = document.createElement("input");
-  dateInput.type = "date";
-
-  if (todo.dueAt) {
-    const dueDate = new Date(todo.dueAt);
-    var year = dueDate.toLocaleString("default", { year: "numeric" });
-    var month = dueDate.toLocaleString("default", { month: "2-digit" });
-    var day = dueDate.toLocaleString("default", { day: "2-digit" });
-
-    dateInput.value = `${year}-${month}-${day}`;
-  }
-
-  cells[0].append(doneInput);
-  cells[1].append(nameInput);
-  cells[2].append(dateInput);
-
-  return cells;
-}
-
-/**
- *
- * @param {HTMLTableRowElement} row
- */
-function makeRowEditable(row, id, todo) {
-  const controlsCell = document.createElement("td");
-
-  const cancelButton = document.createElement("button");
-  cancelButton.classList.add("secondary");
-  cancelButton.innerHTML = '<i class="bi bi-x"></i> Cancel';
-  cancelButton.onclick = () => makeRowDisplay(row, todo);
-
-  const saveButton = document.createElement("button");
-  saveButton.innerHTML = '<i class="bi bi-floppy2-fill"></i> Save';
+function getSaveButton(row, todo) {
+  const saveButton = Ui.createSaveButton();
   saveButton.onclick = async () => {
-    const [valid, { name, dueAt, isComplete }] = validateRow(row);
+    const [valid, { name, dueAt, isComplete }] = extractTodoDataFromRow(row);
     if (!valid) return;
 
-    const updated = await updateTodo(id, {
+    const updated = await Api.updateTodo(todo.id, {
       id: todo.id,
       name,
       dueAt,
@@ -199,16 +126,32 @@ function makeRowEditable(row, id, todo) {
     if (updated) alert("Updated");
     else alert("Could not update");
 
-    render();
+    renderTodos();
   };
 
-  controlsCell.append(saveButton, cancelButton);
-
-  row.innerHTML = "";
-  row.append(...createEditTodoCells(todo), controlsCell);
+  return saveButton;
 }
 
-function validateRow(row) {
+function getCreateButton(row) {
+  const createButton = Ui.createCreateButton();
+
+  createButton.onclick = async () => {
+    const [valid, { name, dueAt, isComplete }] = extractTodoDataFromRow(row);
+    if (!valid) return;
+
+    const createdTodo = await Api.postTodo({ name, dueAt, isComplete });
+
+    if (!createdTodo) alert("Could not create");
+
+    renderTodos();
+  };
+
+  return createButton;
+}
+
+// ===================== COMMON ===================== //
+
+function extractTodoDataFromRow(row) {
   const name = row.children[1]?.children[0]?.value;
   if (!name) {
     alert("Name cannot be empty");
@@ -223,7 +166,6 @@ function validateRow(row) {
 
 function createTodoCreateRow() {
   const row = document.createElement("tr");
-
   row.classList.add("create-row");
 
   const defaultValues = {
@@ -232,45 +174,21 @@ function createTodoCreateRow() {
     dueDate: null,
   };
 
-  const todoEditableCells = createEditTodoCells({
+  const todoEditableCells = getEditTodoCells({
     ...defaultValues,
   });
 
-  const saveButton = document.createElement("button");
-  saveButton.innerHTML = '<i class="bi bi-plus-circle-fill"></i> Create';
-
-  saveButton.onclick = async () => {
-    const [valid, { name, dueAt, isComplete }] = validateRow(row);
-    if (!valid) return;
-
-    const createdTodo = await postTodo({ name, dueAt, isComplete });
-    if (createdTodo) alert("Created");
-    else alert("Failed");
-
-    render();
-  };
-
-  const clearButton = document.createElement("button");
-  clearButton.classList.add("secondary", "outline");
-  clearButton.innerHTML = '<i class="bi bi-eraser-fill"></i> Clear';
+  const clearButton = Ui.createClearButton();
 
   const buttonsCell = document.createElement("td");
-  buttonsCell.append(saveButton, clearButton);
+  buttonsCell.append(getCreateButton(row), clearButton);
 
   clearButton.onclick = () => {
     row.innerHTML = "";
-    row.append(...createEditTodoCells({ ...defaultValues }), buttonsCell);
+    row.append(...getEditTodoCells({ ...defaultValues }), buttonsCell);
   };
 
   row.append(...todoEditableCells, buttonsCell);
-
-  return row;
-}
-
-function createTodoRow(todo) {
-  const row = document.createElement("tr");
-
-  makeRowDisplay(row, todo);
 
   return row;
 }
