@@ -1,0 +1,18 @@
+button {
+  margin: 0.25rem;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.create-row td,
+tr th {
+  background-color: darkslategray;
+}
+
+tr {
+  vertical-align: middle;
+}
+
+input {
+  margin-bottom: 0 !important;
+}
