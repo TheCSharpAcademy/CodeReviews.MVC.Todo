@@ -17,7 +17,7 @@ export class Ui {
 
   static createDeleteButton() {
     return Ui.fromHTML(`
-      <button type="button" class="secondary btn-delete">
+      <button type="button" class="icon-button danger secondary btn-delete">
         <i class="bi bi-trash-fill"></i>
       </button>
     `);
@@ -57,9 +57,17 @@ export class Ui {
 
   static createEnableEditModeButton() {
     return Ui.fromHTML(`
-      <button type="button">
+      <button type="button" class="icon-button">
         <i class="bi bi-pencil-fill"></i>
       </button>
+    `);
+  }
+
+  static createUpdateMessage() {
+    return Ui.fromHTML(`
+      <div class="update-message">
+        <i class="bi bi-exclamation-circle-fill" /> Editing. Click "Save" to save changes.
+      </div>  
     `);
   }
 
@@ -78,14 +86,20 @@ export class Ui {
     `);
   }
 
-  static createCheckboxCell(checked, disabled) {
-    return Ui.fromHTML(`
-      <td>
-        <input type="checkbox" ${checked ? 'checked="checked"' : ""} ${
-      disabled ? 'disabled="true"' : ""
-    } />
-      </td>
-  `);
+  static createCheckboxCell(checked, disabled = false, onChangeCallback) {
+    const checkboxCell = Ui.fromHTML(
+      `
+        <td>
+          <input type="checkbox" ${checked ? 'checked="checked"' : ""} ${
+        disabled ? 'disabled="true"' : ""
+      } />
+        </td>
+      `
+    );
+
+    checkboxCell.children[0].onchange = onChangeCallback ?? undefined;
+
+    return checkboxCell;
   }
 
   static createDateInputCell(maybeDate) {

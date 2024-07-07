@@ -42,7 +42,13 @@ function createTodoRow(todo) {
 }
 
 function showRowInDisplayMode(row, todo) {
-  const checkboxCell = Ui.createCheckboxCell(todo.isComplete, true);
+  const checkboxCell = Ui.createCheckboxCell(
+    todo.isComplete,
+    false,
+    async (e) => {
+      await updateTodo({ ...todo, isComplete: e.currentTarget.checked });
+    }
+  );
 
   const nameCell = Ui.createTextCell(todo.name);
 
@@ -56,21 +62,23 @@ function showRowInDisplayMode(row, todo) {
   controlsCell.append(getEditModeButton(row, todo), getDeleteButton(todo.id));
 
   row.innerHTML = "";
+  row.className = "display-mode";
   row.append(checkboxCell, nameCell, dueDateCell, controlsCell);
 }
 
 // ===================== EDIT MODE ===================== //
 
 function showRowInEditMode(row, todo) {
-  const cancelButton = Ui.createCancelButton();
-  cancelButton.onclick = () => showRowInDisplayMode(row, todo);
-
-  const saveButton = getSaveButton(row, todo);
-
   const controlsCell = document.createElement("td");
-  controlsCell.append(saveButton, cancelButton);
+
+  controlsCell.append(
+    getSaveButton(row, todo),
+    getCancelButton(row, todo),
+    Ui.createUpdateMessage()
+  );
 
   row.innerHTML = "";
+  row.className = "edit-mode";
   row.append(...getEditTodoCells(todo), controlsCell);
 }
 
@@ -102,7 +110,9 @@ function getDeleteButton(todoId) {
     if (!confirmed) return;
 
     const success = await Api.deleteTodo(todoId);
-    alert(success ? "Deleted" : "Could not delete");
+    if (!success) {
+      alert("Could not delete");
+    }
 
     renderTodos();
   };
@@ -110,23 +120,38 @@ function getDeleteButton(todoId) {
   return deleteButton;
 }
 
+function getCancelButton(row, todo) {
+  const cancelButton = Ui.createCancelButton();
+  cancelButton.onclick = () => showRowInDisplayMode(row, todo);
+
+  return cancelButton;
+}
+
+async function updateTodo(todo) {
+  const updated = await Api.updateTodo(todo.id, todo);
+
+  if (updated) alert("Updated");
+  else alert("Could not update");
+
+  await renderTodos();
+}
+
+async function validateAndUpdateTodo(row, todo) {
+  const [valid, { name, dueAt, isComplete }] = extractTodoDataFromRow(row);
+  if (!valid) return;
+
+  await updateTodo({
+    id: todo.id,
+    name,
+    dueAt,
+    isComplete,
+  });
+}
+
 function getSaveButton(row, todo) {
   const saveButton = Ui.createSaveButton();
   saveButton.onclick = async () => {
-    const [valid, { name, dueAt, isComplete }] = extractTodoDataFromRow(row);
-    if (!valid) return;
-
-    const updated = await Api.updateTodo(todo.id, {
-      id: todo.id,
-      name,
-      dueAt,
-      isComplete,
-    });
-
-    if (updated) alert("Updated");
-    else alert("Could not update");
-
-    renderTodos();
+    validateAndUpdateTodo(row, todo);
   };
 
   return saveButton;

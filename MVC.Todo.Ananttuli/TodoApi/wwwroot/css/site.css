@@ -8,6 +8,10 @@ input {
   margin-bottom: 0 !important;
 }
 
+input[type="checkbox"] {
+  outline: 1px solid darkgoldenrod;
+}
+
 .completed-marker-row td {
   background-color: darkgreen;
 }
@@ -23,4 +27,31 @@ input {
 .btn-delete {
   background-color: #dc3545;
   color: white;
+}
+
+.edit-mode td {
+  background-color: lightblue;
+}
+
+.update-message {
+  font-size: 10px;
+  color: darkblue;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0 0.5rem;
+  cursor: pointer;
+  color: var(--pico-primary-background);
+}
+
+.icon-button.danger {
+  color: #dc3545;
+}
+
+.icon-button i {
+  font-size: 1.5rem;
+  color: inherit;
 }
