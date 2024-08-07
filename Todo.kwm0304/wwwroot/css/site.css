@@ -1,0 +1,133 @@
+:root {
+  --light-blue: #8ECAE6;
+  --teal: #219EBC;
+  --navy: #023047;
+  --yellow: #FFB703;
+  --orange: #FB8500;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--navy);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 800px;
+  width: 100%;
+  padding: 20px;
+  background-color: var(--light-blue);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  color: var(--navy);
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+h3 {
+  color: var(--teal);
+  margin-bottom: 20px;
+}
+
+.form-control:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 0.2rem rgba(33, 158, 188, 0.25);
+}
+
+.btn-primary {
+  background-color: var(--orange);
+  border-color: var(--orange);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--yellow);
+  border-color: var(--yellow);
+  color: var(--navy);
+}
+
+.table {
+  background-color: white;
+}
+
+.table thead th {
+  background-color: var(--teal);
+  color: white;
+  border-color: var(--navy);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(142, 202, 230, 0.1);
+}
+
+#counter {
+  text-align: center;
+  font-style: italic;
+  margin-top: 20px;
+  color: var(--navy);
+}
+
+input[type='submit'], button, [aria-label] {
+  cursor: pointer;
+}
+
+#editForm {
+  display: none;
+}
+
+.table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.form-check-input {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.btn-success {
+  background-color: var(--teal);
+  border-color: var(--teal);
+}
+
+.btn-success:hover {
+  background-color: var(--navy);
+  border-color: var(--navy);
+}
+
+.btn-danger {
+  background-color: var(--orange);
+  border-color: var(--orange);
+}
+
+.btn-danger:hover {
+  background-color: var(--yellow);
+  border-color: var(--yellow);
+  color: var(--navy);
+}
+
+@media (max-width: 768px) {
+  .container {
+      padding: 15px;
+      margin: 15px;
+  }
+  
+  h1 {
+      font-size: 1.8rem;
+  }
+  
+  .table th, .table td {
+      padding: 0.5rem;
+  }
+}
