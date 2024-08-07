@@ -1,3 +1,72 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #0f5132;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  max-width: 800px;
+  width: 100%;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  color: #0d6efd;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+h3 {
+  color: #0a58ca;
+  margin-bottom: 20px;
+}
+
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+.table {
+  background-color: #ffffff;
+}
+
+.table thead th {
+  background-color: #0d6efd;
+  color: #ffffff;
+  border-color: #0a58ca;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(13, 110, 253, 0.05);
+}
+
+#counter {
+  text-align: center;
+  font-style: italic;
+  margin-top: 20px;
+  color: #6c757d;
+}
+
 input[type='submit'], button, [aria-label] {
   cursor: pointer;
 }
@@ -6,18 +75,27 @@ input[type='submit'], button, [aria-label] {
   display: none;
 }
 
-table {
-  font-family: Arial, sans-serif;
-  border: 1px solid;
-  border-collapse: collapse;
+.table td {
+  text-align: center;
+  vertical-align: middle;
 }
 
-th {
-  background-color: #f8f8f8;
-  padding: 5px;
+.form-check-input {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
-td {
-  border: 1px solid;
-  padding: 5px;
+@media (max-width: 768px) {
+  .container {
+      padding: 15px;
+      margin: 15px;
+  }
+  
+  h1 {
+      font-size: 1.8rem;
+  }
+  
+  .table th, .table td {
+      padding: 0.5rem;
+  }
 }
