@@ -1,0 +1,49 @@
+header > .light-theme-button {
+  background-image: url(../assets/icon-sun.svg);
+}
+
+.light-theme .todo-input {
+  background-color: var(--veryLightGray);
+}
+
+.light-theme .checkbox {
+  border: 1px solid var(--lightGrayishBlue1);
+}
+
+.light-theme .checkbox:hover {
+  background-image: linear-gradient(var(--veryLightGray), var(--veryLightGray)), 
+                    linear-gradient(var(--checkBackground));
+}
+
+.light-theme .todo {
+  color: var(--veryDarkGrayishBlue1);
+}
+
+.light-theme .todo-list {
+  background-color: var(--veryLightGray);
+  border-bottom: 1px solid var(--lightGrayishBlue1);
+}
+
+.light-theme .todo-list p {
+  color: var(--veryDarkGrayishBlue1);
+}
+
+.light-theme .completed p {
+  color: var(--lightGrayishBlue1);
+}
+
+.light-theme .nav-bar-container {
+  background-color: var(--veryLightGray);
+}
+
+.light-theme .items-left p {
+  color: var(--darkGrayishBlue);
+}
+
+.light-theme .clear-completed-button {
+  color: var(--darkGrayishBlue);
+}
+
+.light-theme .nav-bar-container button:hover {
+  color: var(--veryDarkGrayishBlue1);
+}

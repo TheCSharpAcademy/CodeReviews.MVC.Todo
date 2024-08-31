@@ -1,0 +1,49 @@
+header > .dark-theme-button {
+  background-image: url(../assets/icon-moon.svg);
+}
+
+.dark-theme .todo-input {
+  background-color: var(--veryDarkDesaturatedBlue);
+}
+
+.dark-theme .checkbox {
+  border: 1px solid var(--veryDarkGrayishBlue3);
+}
+
+.dark-theme .checkbox:hover {
+  background-image: linear-gradient(var(--veryDarkDesaturatedBlue), var(--veryDarkDesaturatedBlue)), 
+  linear-gradient(var(--checkBackground));
+}
+
+.dark-theme .todo {
+  color: var(--lightGrayishBlue2);
+}
+
+.dark-theme .todo-list {
+  background-color: var(--veryDarkDesaturatedBlue);
+  border-bottom: 1px solid var(--veryDarkGrayishBlue2);
+}
+
+.dark-theme .todo-list p {
+  color: var(--lightGrayishBlue2);
+}
+
+.dark-theme .completed p {
+  color: var(--veryDarkGrayishBlue2);
+}
+
+.dark-theme .nav-bar-container {
+  background-color: var(--veryDarkDesaturatedBlue);
+}
+
+.dark-theme .items-left p {
+  color: var(--darkGrayishBlue2);
+}
+
+.dark-theme .clear-completed-button {
+  color: var(--darkGrayishBlue2);
+}
+
+.dark-theme .nav-bar-container button:hover {
+  color: var(--lightGrayishBlue3);
+}
