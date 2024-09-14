@@ -1,0 +1,74 @@
+@media (min-width: 601px) {
+  .dark-theme {
+    background-color: var(--veryDarkBlue);
+    background-image: url(../assets/bg-desktop-dark.jpg);
+  }
+
+  .light-theme {
+    background-color: var(--veryLightGray);
+    background-image: url(../assets/bg-desktop-light.jpg);
+  }
+  
+  header {
+    margin-top: 80px;
+    width: 540px;
+  }
+  
+  header > p {
+    font-size: 40px;
+  }
+  
+  header > button {
+    height: 26px;
+    width: 26px;
+  }
+  
+  .todo-input {
+    margin-top: 40px;
+    padding: 20px;
+    width: 540px;
+  }
+  
+  .checkbox {
+    height: 24px;
+    width: 26px;
+  }
+  
+  .todo {
+    margin-left: 20px;
+  }
+  
+  .todo-list-container {
+    height: 390px;
+    margin-top: 24px;
+    width: 540px;
+  }
+  
+  .todo-list {
+    padding: 20px;
+  }
+  
+  .todo-list p {
+    cursor: pointer;
+    margin-left: 20px;
+  }
+  
+  .delete-button {
+    height: 18px;
+    width: 18px;
+  }
+  
+  .nav-bar-container {
+    padding: 0 20px;
+    width: 540px;
+  }
+  
+  .items-left p {
+    font-size: 14px;
+  }
+  
+  .nav-bar-container button {
+    font-size: 14px;
+    padding: 20px 8px;
+  }
+}
