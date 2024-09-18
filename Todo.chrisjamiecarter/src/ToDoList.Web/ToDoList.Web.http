@@ -1,0 +1,37 @@
+﻿@ToDoList_Web_HostAddress = https://localhost:7000
+
+GET {{ToDoList_Web_HostAddress}}/todoitems/
+
+###
+
+POST {{ToDoList_Web_HostAddress}}/todoitems/
+Content-Type: application/json
+
+{
+  "name": "walk dog",
+  "isComplete": true
+}
+
+###
+
+GET {{ToDoList_Web_HostAddress}}/todoitems/{id}
+
+###
+
+PUT {{ToDoList_Web_HostAddress}}/todoitems/{id}
+Content-Type: application/json
+
+{
+  "name": "feed fish",
+  "isComplete": false
+}
+
+###
+
+DELETE {{ToDoList_Web_HostAddress}}/todoitems/{id}
+
+###
+
+GET {{ToDoList_Web_HostAddress}}/todoitems/complete
+
+###
