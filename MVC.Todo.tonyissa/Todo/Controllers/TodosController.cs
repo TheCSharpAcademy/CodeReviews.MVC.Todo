@@ -1,33 +1,57 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Todo.Data;
+using Todo.Models;
 
-namespace Todo.Controllers
+namespace Todo.Controllers;
+
+[Produces("application/json")]
+[ApiController]
+[Route("api/[controller]")]
+public class TodosController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    private readonly TodoContext _context;
+
+    public TodosController(TodoContext context)
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        _context = context;
+    }
 
-        private readonly ILogger<WeatherForecastController> _logger;
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodos()
+    {
+        return Ok(await _context.todos.ToListAsync());
+    }
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
+    [HttpPost]
+    public async Task<ActionResult<IEnumerable<TodoItem>>> CreateTodo(TodoItem todo)
+    {
+        _context.todos.Add(todo);
+        await _context.SaveChangesAsync();
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
-        }
+        return CreatedAtAction(nameof(GetTodos), todo);
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<IEnumerable<TodoItem>>> UpdateTodo(TodoItem todo)
+    {
+        _context.todos.Update(todo);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<IEnumerable<TodoItem>>> DeleteTodo(int id)
+    {
+        var todoItem = await _context.todos.SingleOrDefaultAsync(item => item.Id == id);
+
+        if (todoItem == null)
+            return NotFound();
+
+        _context.todos.Remove(todoItem);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
     }
 }
