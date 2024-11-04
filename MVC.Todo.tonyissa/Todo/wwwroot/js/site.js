@@ -1,4 +1,4 @@
-﻿const uri = 'api/todoitems';
+﻿const uri = 'https://localhost:7107/api/Todos';
 let todos = [];
 
 function getItems() {
@@ -33,6 +33,11 @@ function addItem() {
 }
 
 function deleteItem(id) {
+    var confirmation = confirm("Are you sure you want to delete this item?");
+
+    if (!confirmation)
+        return;
+
     fetch(`${uri}/${id}`, {
         method: 'DELETE'
     })
@@ -57,7 +62,7 @@ function updateItem() {
         name: document.getElementById('edit-name').value.trim()
     };
 
-    fetch(`${uri}/${itemId}`, {
+    fetch(uri, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
