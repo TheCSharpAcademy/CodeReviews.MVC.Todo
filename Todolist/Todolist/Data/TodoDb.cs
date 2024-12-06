@@ -10,4 +10,9 @@ class TodoDb : DbContext
         : base(options) { }
 
     public DbSet<Todo> Todos => Set<Todo>();
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+    }
 }

@@ -1,11 +1,19 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Todolist.Data;
 using Todolist.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<TodoDb>(opt => opt.UseInMemoryDatabase("TodoList"));
+builder.Services.AddDbContext<TodoDb>(opt => 
+    opt.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetService<TodoDb>().Database.EnsureCreated();
+}
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 RouteGroupBuilder todoItems = app.MapGroup("/todoitems");
 
@@ -76,3 +84,4 @@ static async Task<IResult> DeleteTodo(int id, TodoDb db)
 
     return TypedResults.NotFound();
 }
+Console.ReadLine();
