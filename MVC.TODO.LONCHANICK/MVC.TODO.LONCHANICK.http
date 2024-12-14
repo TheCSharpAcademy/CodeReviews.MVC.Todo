@@ -1,0 +1,6 @@
+@MVC.TODO.LONCHANICK_HostAddress = http://localhost:5248
+
+GET {{MVC.TODO.LONCHANICK_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
