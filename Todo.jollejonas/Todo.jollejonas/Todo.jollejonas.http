@@ -1,0 +1,36 @@
+﻿@Todo.jollejonas_HostAddress = https://localhost:7153
+
+POST {{Todo.jollejonas_HostAddress}}/todoitems
+Content-Type: application/json
+
+{
+  "name":"walk dog",
+  "isComplete":true
+}
+
+###
+
+GET {{Todo.jollejonas_HostAddress}}/todoitems
+
+###
+
+@id=1
+GET {{Todo.jollejonas_HostAddress}}/todoitems/{{id}}
+
+###
+
+@id=1
+PUT {{Todo.jollejonas_HostAddress}}/todoitems/{{id}}
+Content-Type: application/json
+
+{
+  "name": "feed fish",
+  "isComplete": false
+}
+
+###
+
+@id=1
+DELETE {{Todo.jollejonas_HostAddress}}/todoitems/{{id}}
+
+###
