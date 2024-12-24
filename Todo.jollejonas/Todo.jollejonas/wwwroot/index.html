@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>To-do CRUD</title>
+    <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+    <h1>To-do CRUD</h1>
+    <h3>Add</h3>
+    <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+        <input type="text" id="add-name" placeholder="New to-do">
+        <input type="submit" value="Add">
+    </form>
+
+    <div id="editForm">
+        <h3>Edit</h3>
+        <p>This item will not be updated before you press the "Save" button</p>
+        <form action="javascript:void(0);" onsubmit="updateItem()">
+            <input type="hidden" id="edit-id">
+            <input type="checkbox" id="edit-isComplete">
+            <input type="text" id="edit-name">
+            <input type="submit" value="Save">
+            <a onclick="closeEditInput()" aria-label="Close">&#10006;</a>
+        </form>
+    </div>
+
+    <div id="deleteConfirm">
+        <p>Are you sure you want to delete <span id="delete-name"></span>?</p>
+        <form action="javascript:void(0);" onsubmit="deleteItem()">
+            <input type="hidden" id="delete-id">
+            <input type="submit" value="Delete">
+            <a onclick="closeDeleteInput()" aria-label="Close">&#10006;</a>
+        </form>
+
+        <p id="delete-item"></p>
+    </div>
+
+    <p id="success"></p>
+
+    <p id="counter"></p>
+
+    <table>
+        <tr>
+            <th>Is Complete?</th>
+            <th>Name</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tbody id="todos"></tbody>
+    </table>
+
+    <script src="js/site.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        getItems();
+    </script>
+</body>
+</html>
