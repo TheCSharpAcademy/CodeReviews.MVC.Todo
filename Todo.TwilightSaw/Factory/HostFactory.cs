@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Todo.TwilightSaw.Data;
+using Todo.TwilightSaw.Repository;
+using Todo.TwilightSaw.Service;
 
 namespace Todo.TwilightSaw.Factory;
 
@@ -21,6 +23,9 @@ public class HostFactory
         services.AddRouting();
         services.AddControllers();
         services.AddEndpointsApiExplorer();
+        services.AddScoped<DbContext, AppDbContext>();
+        services.AddScoped<IRepository<Models.Todo>, TodoRepository<Models.Todo>>();
+        services.AddScoped<TodoService>();
 
         return builder.Build();
     }
