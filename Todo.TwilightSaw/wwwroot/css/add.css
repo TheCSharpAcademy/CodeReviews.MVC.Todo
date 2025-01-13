@@ -1,0 +1,94 @@
+﻿.block {
+    width: 90%;
+    height: 20px;
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.block-add {
+    width: 90%;
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.block-add:hover .block-standart {
+    display: none;
+}
+
+.block-add:hover .expanded {
+    display: flex;
+}
+
+.block-standart {
+    display: flex;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+
+
+.expanded {
+    display: none;
+}
+
+.e {
+    gap: 25px;
+    width: 100%;
+
+    display: flex;
+}
+
+#todoName {
+    border: none;
+    flex-grow: 2;
+    flex: 1;
+    padding-left: 5px;
+}
+
+    #todoName:focus {
+    outline: none;
+}
+
+.name-wrap {
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+
+
+
+h2 {
+    text-align: center;
+}
+
+.element-plus {
+    width: 40px;
+}
+
+.element-plus:hover {
+    opacity: 0.5;
+}
+
+.link-input {
+    padding: 0;
+    border: none;
+    background: none;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.link-input:hover {
+    color: blue;
+}

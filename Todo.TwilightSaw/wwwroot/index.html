@@ -6,24 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TypeScript у ASP.NET Core</title>
     <link rel="stylesheet" href="css/site.css?v=1.0">
+    <link rel="stylesheet" href="css/add.css?v=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
 </head>
 <body>
     
-<h2>Список задач</h2>
+<h2>Task List</h2>
 
 
-
-<div class="block">
-   
-        
-            <ul id="todoList"></ul>
-       
-   
+<div id="todoList">
+    <div class="block"></div>
 </div>
-
-
-
+    <div class="block-add" id="todoContainer">
+        <div class="block-standart" id="collapsedView">
+            <img class="element-plus" fill="currentColor" src="https://www.svgrepo.com/show/428613/plus.svg">
+        </div>
+        
+        <div>
+            <div class="expanded" id="expandedView">
+                <div class="e">
+                    <div class="name-wrap">
+                        <input type="text" id="todoName" placeholder="todoName">
+                    </div>
+                    <input type="checkbox" id="todoComplete" placeholder="todoComplete">
+                    <button id="addTodoBtn">New Task</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <script type ="module" src="js/app.js"></script>
 </body>
 </html>
