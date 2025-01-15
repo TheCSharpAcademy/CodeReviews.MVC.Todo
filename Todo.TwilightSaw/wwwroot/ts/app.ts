@@ -7,31 +7,59 @@ async function fetchTodos(): Promise<void> {
     const list = document.getElementById('todoList')!;
     if (list) {
         list.innerHTML = '';
-        todo.forEach((todo : Todo) => {
+        todo.forEach((todo: Todo) => {
             const listItem = document.createElement("div");
             listItem.classList.add('block');
-            listItem.textContent = `${todo.name} - ${todo.isCompleted ? 'Completed' : 'Not completed'}`;
+
             list.appendChild(listItem);
+            listItem.innerHTML = `
+            <label class="custom-checkbox">
+                <input type="checkbox" ${todo.isCompleted ? 'checked' : ''} data-id="${todo.id}">
+                <span class="checkmark"></span>
+                ${todo.name}
+            </label>
+        `;
+
+            const checkbox = listItem.querySelector('input[type="checkbox"]');
+            checkbox?.addEventListener('change', async (event) => {
+                const target = event.target as HTMLInputElement;
+                const isChecked = target.checked;
+                const todoId = target.getAttribute('data-id');
+              
+                try {
+                    await fetch(`/todoList/${todoId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id: todoId,
+                            isCompleted: isChecked,
+                            name: target.closest('label')?.textContent?.trim() || '' })
+                    });
+                    console.log(`Task ${todoId} done!`);
+                } catch (error) {
+                    console.error('Task error:', error);
+                }
+            });
         });
     }
 }
 
 async function createTodo(): Promise<void> {
     const todoNameInput = document.getElementById('todoName') as HTMLInputElement;
-    const todoComepleteInput = document.getElementById('todoComplete') as HTMLInputElement;
     const todoList = document.getElementById('todoList');
 
     const todoName = todoNameInput.value.trim();
-    const todoComplete = todoComepleteInput.checked;
 
     if (todoName === '') {
-        alert('Будь ласка, заповніть всі поля!');
+        alert('Please, fill all fields!');
         return;
     }
 
     const newTodo: Todo = {
         name: todoName,
-        isCompleted: todoComplete
+        isCompleted: false
     };
 
     try {
@@ -40,16 +68,21 @@ async function createTodo(): Promise<void> {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(newTodo),
+            body: JSON.stringify(newTodo)
         });
 
+        if (!response.ok) {
+            throw new Error('Failed to add a new task');
+        }
+
         fetchTodos;
+
     } catch (error) {
         console.error("Error:", error);
     }
 
+    // Очищення інпута після додавання
     todoNameInput.value = "";
-    todoComepleteInput.checked = false;
 }
 
 window.onload = fetchTodos;

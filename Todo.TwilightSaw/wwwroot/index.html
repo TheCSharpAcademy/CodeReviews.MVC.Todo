@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/site.css?v=1.0">
     <link rel="stylesheet" href="css/add.css?v=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+
 </head>
 <body>
     
@@ -26,10 +27,11 @@
             <div class="expanded" id="expandedView">
                 <div class="e">
                     <div class="name-wrap">
-                        <input type="text" id="todoName" placeholder="todoName">
+                        <input type="text" id="todoName" placeholder="Your task...">
+                        
                     </div>
-                    <input type="checkbox" id="todoComplete" placeholder="todoComplete">
-                    <button id="addTodoBtn">New Task</button>
+                   
+                    <button id="addTodoBtn">Add</button>
                 </div>
             </div>
         </div>
@@ -38,3 +40,7 @@
 </body>
 </html>
 
+<label class="custom-checkbox">
+    <input type="checkbox" id="todoComplete">
+    <span class="checkmark"></span>
+</label>

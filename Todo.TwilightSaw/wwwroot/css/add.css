@@ -1,13 +1,14 @@
 ﻿.block {
-    width: 90%;
+    width:60%;
     height: 20px;
     margin: 20px auto;
     padding: 10px;
     border: 1px solid #ccc;
+
 }
 
 .block-add {
-    width: 90%;
+    width:60%;
     margin: 20px auto;
     padding: 10px;
     border: 1px solid #ccc;
@@ -41,7 +42,6 @@
 .e {
     gap: 25px;
     width: 100%;
-
     display: flex;
 }
 
@@ -56,20 +56,22 @@
     outline: none;
 }
 
-.name-wrap {
-    box-sizing: border-box;
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    border: 1px solid #ccc;
-    padding: 5px;
+
+
+#todoComplete {
+    padding-top: 10px;
 }
 
-
-
-
+#addTodoBtn {
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    align-items: end;
+}
+ 
 h2 {
     text-align: center;
+    align-items: center;
 }
 
 .element-plus {
@@ -91,4 +93,46 @@ h2 {
 
 .link-input:hover {
     color: blue;
+}
+
+
+
+/* Приховуємо стандартний чекбокс */
+.custom-checkbox input {
+    display: none;
+}
+
+/* Стилізуємо чекбокс */
+.custom-checkbox .checkmark {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    background-color: white;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Ефект наведення */
+.custom-checkbox:hover .checkmark {
+    background-color: #f0f0f0;
+}
+
+/* Стиль при виборі */
+.custom-checkbox input:checked + .checkmark {
+
+}
+
+/* Галочка */
+.custom-checkbox input:checked + .checkmark::after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 4px;
+    width: 4px;
+    height: 8px;
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
 }

@@ -18,8 +18,38 @@ function fetchTodos() {
             todo.forEach((todo) => {
                 const listItem = document.createElement("div");
                 listItem.classList.add('block');
-                listItem.textContent = `${todo.name} - ${todo.isCompleted ? 'Completed' : 'Not completed'}`;
                 list.appendChild(listItem);
+                listItem.innerHTML = `
+            <label class="custom-checkbox">
+                <input type="checkbox" ${todo.isCompleted ? 'checked' : ''} data-id="${todo.id}">
+                <span class="checkmark"></span>
+                ${todo.name}
+            </label>
+        `;
+                const checkbox = listItem.querySelector('input[type="checkbox"]');
+                checkbox === null || checkbox === void 0 ? void 0 : checkbox.addEventListener('change', (event) => __awaiter(this, void 0, void 0, function* () {
+                    var _a, _b;
+                    const target = event.target;
+                    const isChecked = target.checked;
+                    const todoId = target.getAttribute('data-id');
+                    try {
+                        yield fetch(`/todoList/${todoId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                id: todoId,
+                                isCompleted: isChecked,
+                                name: ((_b = (_a = target.closest('label')) === null || _a === void 0 ? void 0 : _a.textContent) === null || _b === void 0 ? void 0 : _b.trim()) || ''
+                            })
+                        });
+                        console.log(`Task ${todoId} done!`);
+                    }
+                    catch (error) {
+                        console.error('Task error:', error);
+                    }
+                }));
             });
         }
     });
@@ -27,17 +57,15 @@ function fetchTodos() {
 function createTodo() {
     return __awaiter(this, void 0, void 0, function* () {
         const todoNameInput = document.getElementById('todoName');
-        const todoComepleteInput = document.getElementById('todoComplete');
         const todoList = document.getElementById('todoList');
         const todoName = todoNameInput.value.trim();
-        const todoComplete = todoComepleteInput.checked;
         if (todoName === '') {
-            alert('Будь ласка, заповніть всі поля!');
+            alert('Please, fill all fields!');
             return;
         }
         const newTodo = {
             name: todoName,
-            isCompleted: todoComplete
+            isCompleted: false
         };
         try {
             const response = yield fetch('/todoList', {
@@ -45,15 +73,18 @@ function createTodo() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(newTodo),
+                body: JSON.stringify(newTodo)
             });
+            if (!response.ok) {
+                throw new Error('Failed to add a new task');
+            }
             fetchTodos;
         }
         catch (error) {
             console.error("Error:", error);
         }
+        // Очищення інпута після додавання
         todoNameInput.value = "";
-        todoComepleteInput.checked = false;
     });
 }
 window.onload = fetchTodos;
