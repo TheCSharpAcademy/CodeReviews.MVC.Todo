@@ -11,36 +11,25 @@
 
 </head>
 <body>
-    
+
 <h2>Task List</h2>
 
 
 <div id="todoList">
     <div class="block"></div>
 </div>
-    <div class="block-add" id="todoContainer">
-        <div class="block-standart" id="collapsedView">
-            <img class="element-plus" fill="currentColor" src="https://www.svgrepo.com/show/428613/plus.svg">
-        </div>
-        
-        <div>
-            <div class="expanded" id="expandedView">
-                <div class="e">
-                    <div class="name-wrap">
-                        <input type="text" id="todoName" placeholder="Your task...">
-                        
-                    </div>
-                   
-                    <button id="addTodoBtn">Add</button>
-                </div>
+<div class="block-add" id="todoContainer">
+    <div class="expanded" id="expandedView">
+        <div class="e">
+            <div class="name-wrap">
+                <input type="text" id="todoName" placeholder="">
+
             </div>
+            <img src="addButton.PNG" id="addTodoBtn"> 
         </div>
     </div>
-<script type ="module" src="js/app.js"></script>
+</div>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>
 
-<label class="custom-checkbox">
-    <input type="checkbox" id="todoComplete">
-    <span class="checkmark"></span>
-</label>

@@ -1,28 +1,22 @@
 ﻿.block {
-    width:60%;
+    display: flex;
+    width: 60%;
     height: 20px;
     margin: 20px auto;
     padding: 10px;
-    border: 1px solid #ccc;
-
+    border-bottom: 1px solid #ccc;
+    justify-content: space-between;
 }
 
 .block-add {
     width:60%;
     margin: 20px auto;
     padding: 10px;
-    border: 1px solid #ccc;
+   
     overflow: hidden;
     transition: all 0.3s ease;
 }
 
-.block-add:hover .block-standart {
-    display: none;
-}
-
-.block-add:hover .expanded {
-    display: flex;
-}
 
 .block-standart {
     display: flex;
@@ -34,29 +28,29 @@
 }
 
 
-
-.expanded {
-    display: none;
-}
-
 .e {
     gap: 25px;
     width: 100%;
     display: flex;
+    justify-content: space-between;
+    
 }
 
 #todoName {
     border: none;
-    flex-grow: 2;
-    flex: 1;
     padding-left: 5px;
+    width: 100%;
 }
 
     #todoName:focus {
     outline: none;
 }
 
-
+.name-wrap {
+    display: flex;
+    flex-grow: 2;
+    border-bottom: 1px solid #ccc;
+}
 
 #todoComplete {
     padding-top: 10px;
@@ -67,6 +61,7 @@
     cursor: pointer;
     flex-shrink: 0;
     align-items: end;
+    width: 24px;
 }
  
 h2 {
@@ -96,6 +91,10 @@ h2 {
 }
 
 
+.delete-icon {
+    cursor: pointer;
+}
+
 
 /* Приховуємо стандартний чекбокс */
 .custom-checkbox input {
@@ -108,7 +107,6 @@ h2 {
     width: 20px;
     height: 20px;
     border: 2px solid #ccc;
-    border-radius: 20px;
     background-color: white;
     position: relative;
     cursor: pointer;
@@ -136,3 +134,4 @@ h2 {
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
 }
+
