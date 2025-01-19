@@ -1,0 +1,55 @@
+﻿.hidden-checkbox {
+    display: none;
+}
+
+.hidden-checkbox:checked ~ .todo-text {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.todo-text {
+    font-size: 16px;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.context-menu {
+    display: none; /* Ховати меню за замовчуванням */
+    position: absolute; /* Для позиціювання вказівником миші */
+    background-color: #fff; /* Білий фон */
+    border: 1px solid #ccc; /* Межі меню */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тінь для естетики */
+    z-index: 1000; /* Щоб меню було поверх інших елементів */
+    list-style-type: none;
+    padding: 10px 0;
+}
+
+.context-menu ul {
+    padding: 0;
+    margin: 0;
+}
+
+.context-menu li {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.context-menu li:hover {
+    background-color: #f0f0f0; /* Фон при наведенні */
+}

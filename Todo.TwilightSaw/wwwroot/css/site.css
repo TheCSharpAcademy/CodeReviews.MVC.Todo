@@ -27,15 +27,61 @@ body {
     font-weight: bold;
     margin: 0;
     padding: 0;
+    background-color: #f9f9f9;
 }
 
-.element {
-    display: grid;
-    grid-template-columns: 0.23fr 0.37fr 2fr 0.25fr;
+
+
+
+
+.list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
 }
 
-.image {
-    width: 80px;
-    height: 100px;
+img {
+    width: 24px;
+    cursor: pointer;
 }
 
+
+.todoList {
+    display: flex;
+    width: 1000px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.todoAdd {
+    padding: 10px;
+    display: flex;
+    width: 500px;
+    justify-content: space-between;
+}
+
+#todoName, #todoName:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    width: 90%;
+    border-bottom: 1px solid #ccc;
+}
+
+.block {
+    display: flex;
+    width: 500px;
+    height: auto;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+    justify-content: space-between;
+    
+}
+
+.todo-text {
+    overflow-wrap: break-word; 
+    white-space: normal; 
+    word-break: break-word;
+}

@@ -12,37 +12,46 @@ async function fetchTodos(): Promise<void> {
             listItem.classList.add("block");
 
             list.appendChild(listItem);
-            listItem.innerHTML = `<label class="custom-checkbox">
-                <input type="checkbox" ${todo.isCompleted ? "checked" : ""} data-id="${todo.id}">
-                <span class="checkmark"></span>
-                ${todo.name}
-            </label>
-            <img src="addButton.PNG" class="delete-icon" data-id="${todo.id}">`;
+            listItem.innerHTML = `
+    <label class="custom-checkbox" id="myDiv">
+        <input 
+            type="checkbox" 
+            class="hidden-checkbox" 
+            ${todo.isCompleted ? "checked" : ""} 
+            data-id="${todo.id}">
+        <span class="todo-text ${todo.isCompleted ? "completed" : ""}">
+            ${todo.name}
+        </span>
+    </label>
+    <div id="contextMenu" class="context-menu">
+    <ul>
+        <li>Редагувати</li>
+        <li>Видалити</li>
+    </ul>
+    </div>
+   <div class="delete-block"> <img src="delete-button.png" class="delete-icon" data-id="${todo.id}"></div>
+`;
             switchCheckbox(listItem);
-
-            const deleteBtn = listItem.querySelector(".delete-icon");
-            deleteBtn?.addEventListener("click", async () => {
-                const todoId = deleteBtn.getAttribute("data-id");
-
-                try {
-                    await fetch(`/todoList/${todoId}`, {
-                        method: "DELETE",
-                    });
-                    listItem.remove(); // Видаляємо елемент із DOM
-                    console.log(`Задача ${todoId} видалена`);
-                } catch (error) {
-                    console.error("Помилка при видаленні задачі:", error);
-                }
-            });
+            deleteTodo(listItem);
         });
+        const listItem = document.createElement("div");
+        listItem.classList.add("todoAdd");
+        listItem.id = "todoContainer";
+        list.appendChild(listItem);
+        listItem.innerHTML = `
+            
+            <input type="text" id = "todoName" placeholder = "" >
+            <img src="create-button.PNG" id = "addTodoBtn" >  
+`
+        document.getElementById("addTodoBtn")?.addEventListener("click", createTodo);
     }
 }
+
 
 async function createTodo(): Promise<void> {
     const todoNameInput = document.getElementById(
         "todoName"
     ) as HTMLInputElement;
-    const todoList = document.getElementById("todoList");
 
     const todoName = todoNameInput.value.trim();
 
@@ -68,8 +77,7 @@ async function createTodo(): Promise<void> {
         if (!response.ok) {
             throw new Error("Failed to add a new task");
         }
-
-        await fetchTodos;
+        await fetchTodos();
     } catch (error) {
         console.error("Error:", error);
     }
@@ -102,43 +110,47 @@ async function switchCheckbox(listItem: HTMLElement): Promise<void> {
     });
 }
 
-async function deleteTodo(): Promise<void> {
-    const todoNameInput = document.getElementById(
-        "todoName"
-    ) as HTMLInputElement;
-    const todoList = document.getElementById("todoList");
+async function deleteTodo(listItem: HTMLElement): Promise<void> {
+    const deleteBtn = listItem.querySelector(".delete-icon");
+    deleteBtn?.addEventListener("click", async () => {
+        const todoId = deleteBtn.getAttribute("data-id");
 
-    const todoName = todoNameInput.value.trim();
-
-    if (todoName === "") {
-        alert("Please, fill all fields!");
-        return;
-    }
-
-    const newTodo: Todo = {
-        name: todoName,
-        isCompleted: false,
-    };
-
-    try {
-        const response = await fetch("/todoList", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newTodo),
-        });
-
-        if (!response.ok) {
-            throw new Error("Failed to add a new task");
+        try {
+            await fetch(`/todoList/${todoId}`, {
+                method: "DELETE",
+            });
+            listItem.remove(); // Видаляємо елемент із DOM
+            console.log(`Задача ${todoId} видалена`);
+        } catch (error) {
+            console.error("Помилка при видаленні задачі:", error);
         }
-
-        
-    } catch (error) {
-        console.error("Error:", error);
-    }
-    todoNameInput.value = "";
+    });
 }
 
 window.onload = fetchTodos;
 document.getElementById("addTodoBtn")?.addEventListener("click", createTodo);
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const myDiv = document.getElementById("myDiv");
+    const contextMenu = document.getElementById("contextMenu");
+
+    // Показ контекстного меню
+    myDiv?.addEventListener("contextmenu", (event) => {
+        event.preventDefault(); // Вимкнути стандартне контекстне меню
+
+        // Встановлення позиції меню
+        if (contextMenu) {
+            contextMenu.style.display = "block";
+            contextMenu.style.left = `${event.pageX}px`;
+            contextMenu.style.top = `${event.pageY}px`;
+        }
+    });
+
+    // Ховати контекстне меню при кліку поза ним
+    document.addEventListener("click", () => {
+        if (contextMenu) {
+            contextMenu.style.display = "none";
+        }
+    });
+});

@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var _a;
 function fetchTodos() {
     return __awaiter(this, void 0, void 0, function* () {
+        var _a;
         const response = yield fetch("/todoLists");
         const todo = yield response.json();
         const list = document.getElementById("todoList");
@@ -19,35 +20,44 @@ function fetchTodos() {
                 const listItem = document.createElement("div");
                 listItem.classList.add("block");
                 list.appendChild(listItem);
-                listItem.innerHTML = `<label class="custom-checkbox">
-                <input type="checkbox" ${todo.isCompleted ? "checked" : ""} data-id="${todo.id}">
-                <span class="checkmark"></span>
-                ${todo.name}
-            </label>
-            <img src="addButton.PNG" class="delete-icon" data-id="${todo.id}">`;
+                listItem.innerHTML = `
+    <label class="custom-checkbox" id="myDiv">
+        <input 
+            type="checkbox" 
+            class="hidden-checkbox" 
+            ${todo.isCompleted ? "checked" : ""} 
+            data-id="${todo.id}">
+        <span class="todo-text ${todo.isCompleted ? "completed" : ""}">
+            ${todo.name}
+        </span>
+    </label>
+    <div id="contextMenu" class="context-menu">
+    <ul>
+        <li>Редагувати</li>
+        <li>Видалити</li>
+    </ul>
+    </div>
+   <div class="delete-block"> <img src="delete-button.png" class="delete-icon" data-id="${todo.id}"></div>
+`;
                 switchCheckbox(listItem);
-                const deleteBtn = listItem.querySelector(".delete-icon");
-                deleteBtn === null || deleteBtn === void 0 ? void 0 : deleteBtn.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-                    const todoId = deleteBtn.getAttribute("data-id");
-                    try {
-                        yield fetch(`/todoList/${todoId}`, {
-                            method: "DELETE",
-                        });
-                        listItem.remove(); // Видаляємо елемент із DOM
-                        console.log(`Задача ${todoId} видалена`);
-                    }
-                    catch (error) {
-                        console.error("Помилка при видаленні задачі:", error);
-                    }
-                }));
+                deleteTodo(listItem);
             });
+            const listItem = document.createElement("div");
+            listItem.classList.add("todoAdd");
+            listItem.id = "todoContainer";
+            list.appendChild(listItem);
+            listItem.innerHTML = `
+            
+            <input type="text" id = "todoName" placeholder = "" >
+            <img src="create-button.PNG" id = "addTodoBtn" >  
+`;
+            (_a = document.getElementById("addTodoBtn")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", createTodo);
         }
     });
 }
 function createTodo() {
     return __awaiter(this, void 0, void 0, function* () {
         const todoNameInput = document.getElementById("todoName");
-        const todoList = document.getElementById("todoList");
         const todoName = todoNameInput.value.trim();
         if (todoName === "") {
             alert("Please, fill all fields!");
@@ -68,7 +78,7 @@ function createTodo() {
             if (!response.ok) {
                 throw new Error("Failed to add a new task");
             }
-            yield fetchTodos;
+            yield fetchTodos();
         }
         catch (error) {
             console.error("Error:", error);
@@ -104,38 +114,45 @@ function switchCheckbox(listItem) {
         }));
     });
 }
-function deleteTodo() {
+function deleteTodo(listItem) {
     return __awaiter(this, void 0, void 0, function* () {
-        const todoNameInput = document.getElementById("todoName");
-        const todoList = document.getElementById("todoList");
-        const todoName = todoNameInput.value.trim();
-        if (todoName === "") {
-            alert("Please, fill all fields!");
-            return;
-        }
-        const newTodo = {
-            name: todoName,
-            isCompleted: false,
-        };
-        try {
-            const response = yield fetch("/todoList", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newTodo),
-            });
-            if (!response.ok) {
-                throw new Error("Failed to add a new task");
+        const deleteBtn = listItem.querySelector(".delete-icon");
+        deleteBtn === null || deleteBtn === void 0 ? void 0 : deleteBtn.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
+            const todoId = deleteBtn.getAttribute("data-id");
+            try {
+                yield fetch(`/todoList/${todoId}`, {
+                    method: "DELETE",
+                });
+                listItem.remove(); // Видаляємо елемент із DOM
+                console.log(`Задача ${todoId} видалена`);
             }
-        }
-        catch (error) {
-            console.error("Error:", error);
-        }
-        todoNameInput.value = "";
+            catch (error) {
+                console.error("Помилка при видаленні задачі:", error);
+            }
+        }));
     });
 }
 window.onload = fetchTodos;
 (_a = document.getElementById("addTodoBtn")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", createTodo);
+document.addEventListener("DOMContentLoaded", () => {
+    const myDiv = document.getElementById("myDiv");
+    const contextMenu = document.getElementById("contextMenu");
+    // Показ контекстного меню
+    myDiv === null || myDiv === void 0 ? void 0 : myDiv.addEventListener("contextmenu", (event) => {
+        event.preventDefault(); // Вимкнути стандартне контекстне меню
+        // Встановлення позиції меню
+        if (contextMenu) {
+            contextMenu.style.display = "block";
+            contextMenu.style.left = `${event.pageX}px`;
+            contextMenu.style.top = `${event.pageY}px`;
+        }
+    });
+    // Ховати контекстне меню при кліку поза ним
+    document.addEventListener("click", () => {
+        if (contextMenu) {
+            contextMenu.style.display = "none";
+        }
+    });
+});
 export {};
 //# sourceMappingURL=app.js.map
