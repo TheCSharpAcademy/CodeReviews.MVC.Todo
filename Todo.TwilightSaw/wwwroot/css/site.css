@@ -75,9 +75,7 @@ img {
     width: 500px;
     height: auto;
     padding: 5px;
-    border-bottom: 1px solid #ccc;
     justify-content: space-between;
-    
 }
 
 .todo-text {
@@ -85,3 +83,6 @@ img {
     white-space: normal; 
     word-break: break-word;
 }
+
+
+

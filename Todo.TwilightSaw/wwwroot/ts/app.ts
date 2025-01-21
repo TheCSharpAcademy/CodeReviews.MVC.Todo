@@ -1,5 +1,130 @@
 import { Todo } from "./Todo.js";
 
+createContextMenu();
+
+document.addEventListener("contextmenu", (event) => {
+    const target = (event.target as HTMLElement).closest(".block");
+    const contextMenu = document.getElementById("contextMenu");
+
+    if (target && contextMenu) {
+        event.preventDefault();
+
+
+        document.querySelectorAll(".block.highlight").forEach((block) => {
+            block.classList.remove("highlight");
+        });
+        target.classList.add("highlight");
+        // Встановлення позиції меню
+        contextMenu.style.display = "block";
+        contextMenu.style.left = `${event.pageX}px`;
+        contextMenu.style.top = `${event.pageY}px`;
+
+        // Зберігаємо ID цільового завдання у атрибуті меню
+        const taskId = target.querySelector("input")?.getAttribute("data-id");
+        contextMenu.setAttribute("data-target-id", taskId || "");
+    }
+});
+
+document.addEventListener("click", (event) => {
+    const contextMenu = document.getElementById("contextMenu");
+    if (contextMenu && !contextMenu.contains(event.target as Node)) {
+        contextMenu.style.display = "none";
+    }
+
+    document.querySelectorAll(".block.highlight").forEach((block) => {
+        block.classList.remove("highlight");
+    });
+});
+
+
+
+document.getElementById("contextMenu")?.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    const contextMenu = document.getElementById("contextMenu");
+    const taskId = contextMenu?.getAttribute("data-target-id");
+
+    if (target.id === "editTask") {
+        console.log(`Редагувати задачу з ID: ${taskId}`);
+
+        document.getElementById("editTask")?.addEventListener("click", () => {
+            const todoText = document.querySelector(`input[data-id="${taskId}"]`)?.nextElementSibling as HTMLSpanElement | null;
+
+            if (!todoText) {
+                console.error(`Не вдалося знайти елемент з data-id="${taskId}".`);
+                return;
+            }
+
+            if (todoText.contentEditable === "true") {
+                // Завершити редагування
+                todoText.contentEditable = "false";
+                todoText.style.border = "none";
+
+                const newText = todoText.textContent?.trim();
+                if (newText && taskId) {
+                    editTodoById(taskId, newText);
+                }
+            } else {
+                // Розпочати редагування
+                todoText.contentEditable = "true";
+                todoText.style.border = "1px dashed #000";
+                todoText.focus();
+            }
+        });
+        
+    } else if (target.id === "deleteTask") {
+        console.log(`Видалити задачу з ID: ${taskId}`);
+        deleteTodoById(taskId);
+    }
+
+    // Ховаємо меню після виконання дії
+    contextMenu!.style.display = "none";
+});
+
+async function deleteTodoById(taskId: string | null | undefined): Promise<void> {
+    if (!taskId) return;
+
+    try {
+        await fetch(`/todoList/${taskId}`, { method: "DELETE" });
+        const taskElement = document.querySelector(`input[data-id="${taskId}"]`)?.closest(".block");
+        taskElement?.remove();
+        console.log(`Задача ${taskId} видалена`);
+    } catch (error) {
+        console.error("Помилка при видаленні задачі:", error);
+    }
+}
+
+async function editTodoById(taskId: string, newText: string): Promise<void> {
+    if (!taskId || !newText) return;
+
+    try {
+        // Відправлення зміненого тексту на сервер
+        const response = await fetch(`/todoList/${taskId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name: newText }), // Передаємо новий текст
+        });
+
+        if (!response.ok) {
+            throw new Error("Не вдалося оновити завдання на сервері");
+        }
+
+        // Оновлення тексту у DOM
+        const taskElement = document.querySelector(`input[data-id="${taskId}"]`)?.closest(".block");
+        const todoTextElement = taskElement?.querySelector(".todo-text") as HTMLSpanElement;
+
+        if (todoTextElement) {
+            todoTextElement.textContent = newText;
+            console.log(`Завдання ${taskId} оновлено: ${newText}`);
+        }
+    } catch (error) {
+        console.error("Помилка при оновленні завдання:", error);
+    }
+}
+
+fetchTodos();
+
 async function fetchTodos(): Promise<void> {
     const response = await fetch("/todoLists");
     const todo: Todo[] = await response.json();
@@ -23,16 +148,9 @@ async function fetchTodos(): Promise<void> {
             ${todo.name}
         </span>
     </label>
-    <div id="contextMenu" class="context-menu">
-    <ul>
-        <li>Редагувати</li>
-        <li>Видалити</li>
-    </ul>
     </div>
-   <div class="delete-block"> <img src="delete-button.png" class="delete-icon" data-id="${todo.id}"></div>
 `;
             switchCheckbox(listItem);
-            deleteTodo(listItem);
         });
         const listItem = document.createElement("div");
         listItem.classList.add("todoAdd");
@@ -44,9 +162,11 @@ async function fetchTodos(): Promise<void> {
             <img src="create-button.PNG" id = "addTodoBtn" >  
 `
         document.getElementById("addTodoBtn")?.addEventListener("click", createTodo);
+        document.getElementById("todoName")?.addEventListener("keydown", (event: KeyboardEvent) => {
+            if (event.key === "Enter") { createTodo(); }
+        });
     }
 }
-
 
 async function createTodo(): Promise<void> {
     const todoNameInput = document.getElementById(
@@ -110,47 +230,36 @@ async function switchCheckbox(listItem: HTMLElement): Promise<void> {
     });
 }
 
-async function deleteTodo(listItem: HTMLElement): Promise<void> {
-    const deleteBtn = listItem.querySelector(".delete-icon");
-    deleteBtn?.addEventListener("click", async () => {
-        const todoId = deleteBtn.getAttribute("data-id");
+function createContextMenu(): HTMLElement {
+    // Створення контейнера меню
+    const contextMenu = document.createElement("div");
+    contextMenu.id = "contextMenu";
+    contextMenu.className = "context-menu";
+    contextMenu.style.display = "none"; // Ховаємо меню за замовчуванням
 
-        try {
-            await fetch(`/todoList/${todoId}`, {
-                method: "DELETE",
-            });
-            listItem.remove(); // Видаляємо елемент із DOM
-            console.log(`Задача ${todoId} видалена`);
-        } catch (error) {
-            console.error("Помилка при видаленні задачі:", error);
-        }
-    });
+    // Створення списку опцій меню
+    const menu = document.createElement("div");
+    menu.className = "menu";
+
+    // Створення кнопки "Edit"
+    const editOption = document.createElement("span");
+    editOption.id = "editTask";
+    editOption.textContent = "Edit";
+    menu.appendChild(editOption);
+
+    // Створення кнопки "Delete"
+    const deleteOption = document.createElement("span");
+    deleteOption.id = "deleteTask";
+    deleteOption.textContent = "Delete";
+    menu.appendChild(deleteOption);
+
+    // Додавання списку опцій до контекстного меню
+    contextMenu.appendChild(menu);
+
+    // Додавання контекстного меню до документа
+    document.body.appendChild(contextMenu);
+
+    return contextMenu;
 }
 
 window.onload = fetchTodos;
-document.getElementById("addTodoBtn")?.addEventListener("click", createTodo);
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    const myDiv = document.getElementById("myDiv");
-    const contextMenu = document.getElementById("contextMenu");
-
-    // Показ контекстного меню
-    myDiv?.addEventListener("contextmenu", (event) => {
-        event.preventDefault(); // Вимкнути стандартне контекстне меню
-
-        // Встановлення позиції меню
-        if (contextMenu) {
-            contextMenu.style.display = "block";
-            contextMenu.style.left = `${event.pageX}px`;
-            contextMenu.style.top = `${event.pageY}px`;
-        }
-    });
-
-    // Ховати контекстне меню при кліку поза ним
-    document.addEventListener("click", () => {
-        if (contextMenu) {
-            contextMenu.style.display = "none";
-        }
-    });
-});
