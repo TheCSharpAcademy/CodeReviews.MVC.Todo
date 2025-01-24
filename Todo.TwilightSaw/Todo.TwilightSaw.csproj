@@ -7,9 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\create-button.PNG" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Data\" />
     <Folder Include="Service\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\create-button.PNG" />
   </ItemGroup>
 
   <ItemGroup>

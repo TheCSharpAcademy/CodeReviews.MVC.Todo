@@ -9,17 +9,15 @@ document.addEventListener("contextmenu", (event) => {
     if (target && contextMenu) {
         event.preventDefault();
 
-
         document.querySelectorAll(".block.highlight").forEach((block) => {
             block.classList.remove("highlight");
         });
         target.classList.add("highlight");
-        // Встановлення позиції меню
+
         contextMenu.style.display = "block";
         contextMenu.style.left = `${event.pageX}px`;
         contextMenu.style.top = `${event.pageY}px`;
 
-        // Зберігаємо ID цільового завдання у атрибуті меню
         const taskId = target.querySelector("input")?.getAttribute("data-id");
         contextMenu.setAttribute("data-target-id", taskId || "");
     }
@@ -36,60 +34,111 @@ document.addEventListener("click", (event) => {
     });
 });
 
-
-
 document.getElementById("contextMenu")?.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
     const contextMenu = document.getElementById("contextMenu");
     const taskId = contextMenu?.getAttribute("data-target-id");
 
+    if (!taskId) {
+        console.error("No data-target-id in the context menu.");
+        return;
+    }
+
     if (target.id === "editTask") {
-        console.log(`Редагувати задачу з ID: ${taskId}`);
+        const todoText = document.querySelector(`input[data-id="${taskId}"]`)
+            ?.nextElementSibling as HTMLSpanElement | null;
+        const checkbox = document.querySelector(
+            `input[data-id="${taskId}"]`
+        ) as HTMLInputElement | null;
 
-        document.getElementById("editTask")?.addEventListener("click", () => {
-            const todoText = document.querySelector(`input[data-id="${taskId}"]`)?.nextElementSibling as HTMLSpanElement | null;
+        if (!todoText) {
+            console.error(`Cant find the element with data-id="${taskId}".`);
+            return;
+        }
 
-            if (!todoText) {
-                console.error(`Не вдалося знайти елемент з data-id="${taskId}".`);
-                return;
-            }
-
-            if (todoText.contentEditable === "true") {
-                // Завершити редагування
-                todoText.contentEditable = "false";
-                todoText.style.border = "none";
-
-                const newText = todoText.textContent?.trim();
-                if (newText && taskId) {
-                    editTodoById(taskId, newText);
-                }
-            } else {
-                // Розпочати редагування
-                todoText.contentEditable = "true";
-                todoText.style.border = "1px dashed #000";
-                todoText.focus();
-            }
-        });
-        
+        if (
+            todoText.contentEditable === "false" ||
+            todoText.contentEditable === "inherit"
+        ) {
+            startEditing(todoText, checkbox, taskId);
+        } else {
+            finishEditing(todoText, checkbox, taskId);
+        }
     } else if (target.id === "deleteTask") {
-        console.log(`Видалити задачу з ID: ${taskId}`);
         deleteTodoById(taskId);
     }
 
-    // Ховаємо меню після виконання дії
     contextMenu!.style.display = "none";
 });
 
-async function deleteTodoById(taskId: string | null | undefined): Promise<void> {
+function startEditing(
+    todoText: HTMLSpanElement,
+    checkbox: HTMLInputElement | null,
+    taskId: string
+) {
+    if (todoText.contentEditable === "true") return;
+
+    if (checkbox) checkbox.disabled = true;
+
+    todoText.contentEditable = "true";
+    todoText.setAttribute("spellcheck", "false");
+    todoText.classList.add("editable");
+    todoText.focus();
+    moveCursorToEnd(todoText);
+
+    const keydownHandler = (event: KeyboardEvent) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            finishEditing(todoText, checkbox, taskId);
+            document.removeEventListener("keydown", keydownHandler);
+            document.removeEventListener("click", clickOutsideHandler);
+        }
+    };
+    setTimeout(() => {
+        todoText.addEventListener("keydown", keydownHandler);
+    }, 0);
+
+    const clickOutsideHandler = (event: MouseEvent) => {
+        if (!todoText.contains(event.target as Node)) {
+            finishEditing(todoText, checkbox, taskId);
+            document.removeEventListener("click", clickOutsideHandler);
+        }
+    };
+    setTimeout(() => {
+        document.addEventListener("click", clickOutsideHandler);
+    }, 0);
+}
+
+function finishEditing(
+    todoText: HTMLSpanElement,
+    checkbox: HTMLInputElement | null,
+    taskId: string
+) {
+    todoText.contentEditable = "false";
+    todoText.classList.remove("editable");
+
+    if (checkbox) checkbox.disabled = false;
+
+    const newText = todoText.textContent?.trim();
+    if (newText && taskId) {
+        editTodoById(taskId, newText);
+    }
+}
+
+async function deleteTodoById(
+    taskId: string | null | undefined
+): Promise<void> {
     if (!taskId) return;
 
     try {
         await fetch(`/todoList/${taskId}`, { method: "DELETE" });
-        const taskElement = document.querySelector(`input[data-id="${taskId}"]`)?.closest(".block");
+        const taskElement = document
+            .querySelector(`input[data-id="${taskId}"]`)
+            ?.closest(".block");
         taskElement?.remove();
         console.log(`Задача ${taskId} видалена`);
     } catch (error) {
-        console.error("Помилка при видаленні задачі:", error);
+        console.error("Deleting task error:", error);
     }
 }
 
@@ -97,29 +146,31 @@ async function editTodoById(taskId: string, newText: string): Promise<void> {
     if (!taskId || !newText) return;
 
     try {
-        // Відправлення зміненого тексту на сервер
         const response = await fetch(`/todoList/${taskId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name: newText }), // Передаємо новий текст
+            body: JSON.stringify({ name: newText }),
         });
 
         if (!response.ok) {
-            throw new Error("Не вдалося оновити завдання на сервері");
+            throw new Error("Error with task refreshing.");
         }
 
-        // Оновлення тексту у DOM
-        const taskElement = document.querySelector(`input[data-id="${taskId}"]`)?.closest(".block");
-        const todoTextElement = taskElement?.querySelector(".todo-text") as HTMLSpanElement;
+        const taskElement = document
+            .querySelector(`input[data-id="${taskId}"]`)
+            ?.closest(".block");
+        const todoTextElement = taskElement?.querySelector(
+            ".todo-text"
+        ) as HTMLSpanElement;
 
         if (todoTextElement) {
             todoTextElement.textContent = newText;
             console.log(`Завдання ${taskId} оновлено: ${newText}`);
         }
     } catch (error) {
-        console.error("Помилка при оновленні завдання:", error);
+        console.error("Error with task refreshing:", error);
     }
 }
 
@@ -159,12 +210,18 @@ async function fetchTodos(): Promise<void> {
         listItem.innerHTML = `
             
             <input type="text" id = "todoName" placeholder = "" >
-            <img src="create-button.PNG" id = "addTodoBtn" >  
-`
-        document.getElementById("addTodoBtn")?.addEventListener("click", createTodo);
-        document.getElementById("todoName")?.addEventListener("keydown", (event: KeyboardEvent) => {
-            if (event.key === "Enter") { createTodo(); }
-        });
+            <img src="https://icons.veryicon.com/png/o/object/material-design-icons-1/pencil-50.png" id = "addTodoBtn" >
+`;
+        document
+            .getElementById("addTodoBtn")
+            ?.addEventListener("click", createTodo);
+        document
+            .getElementById("todoName")
+            ?.addEventListener("keydown", (event: KeyboardEvent) => {
+                if (event.key === "Enter") {
+                    createTodo();
+                }
+            });
     }
 }
 
@@ -231,35 +288,40 @@ async function switchCheckbox(listItem: HTMLElement): Promise<void> {
 }
 
 function createContextMenu(): HTMLElement {
-    // Створення контейнера меню
     const contextMenu = document.createElement("div");
     contextMenu.id = "contextMenu";
     contextMenu.className = "context-menu";
-    contextMenu.style.display = "none"; // Ховаємо меню за замовчуванням
+    contextMenu.style.display = "none";
 
-    // Створення списку опцій меню
     const menu = document.createElement("div");
     menu.className = "menu";
 
-    // Створення кнопки "Edit"
     const editOption = document.createElement("span");
     editOption.id = "editTask";
     editOption.textContent = "Edit";
     menu.appendChild(editOption);
 
-    // Створення кнопки "Delete"
     const deleteOption = document.createElement("span");
     deleteOption.id = "deleteTask";
     deleteOption.textContent = "Delete";
     menu.appendChild(deleteOption);
 
-    // Додавання списку опцій до контекстного меню
     contextMenu.appendChild(menu);
 
-    // Додавання контекстного меню до документа
     document.body.appendChild(contextMenu);
 
     return contextMenu;
+}
+
+function moveCursorToEnd(element: HTMLElement) {
+    const range = document.createRange();
+    const selection = window.getSelection();
+
+    range.selectNodeContents(element);
+    range.collapse(false);
+
+    selection?.removeAllRanges();
+    selection?.addRange(range);
 }
 
 window.onload = fetchTodos;

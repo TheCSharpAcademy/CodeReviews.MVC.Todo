@@ -79,10 +79,15 @@ img {
 }
 
 .todo-text {
-    overflow-wrap: break-word; 
-    white-space: normal; 
+    overflow-wrap: break-word;
+    white-space: normal;
     word-break: break-word;
+    font-size: 16px;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
+    .todo-text.editable {
+        outline: none;
+        border-bottom: 1px solid grey;
 
-
+    }
