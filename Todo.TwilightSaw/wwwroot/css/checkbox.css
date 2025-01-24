@@ -1,16 +1,14 @@
-﻿.hidden-checkbox {
-    display: none;
-}
+﻿.hidden-checkbox { display: none; }
 
 .hidden-checkbox:checked ~ .todo-text {
-    text-decoration: line-through;
     color: gray;
+    text-decoration: line-through;
 }
 
 .custom-checkbox {
-    display: flex;
     align-items: center;
     cursor: pointer;
+    display: flex;
 }
 
 
@@ -21,50 +19,82 @@
 
 
 .context-menu {
-    display: none; /* Ховати меню за замовчуванням */
-    position: absolute; /* Для позиціювання вказівником миші */
-    background-color: #fff; /* Білий фон */
-    border: 1px solid #ccc; /* Межі меню */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тінь для естетики */
-    z-index: 1000; /* Щоб меню було поверх інших елементів */
-    list-style-type: none;
-    width: 80px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none;
     height: 60px;
+    list-style-type: none;
+    position: absolute;
+    width: 70px;
+    z-index: 1000;
 }
 
 
 
 
-    .context-menu div {
-        width: 100%; /* Розтягує на весь батьківський контейнер */
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: ;
-        cursor: pointer;
-        
-        
-    }
+.context-menu div {
+    align-items: ;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;        
+}
 
-    .context-menu span {
-        padding-left: 10px;
-        flex: 1;
-    }
-    .context-menu span:first-child {
-        padding-top: 5px;
-    }
-        .context-menu span:nth-child(2) {
-            padding-top: 5px;
-        }
+.context-menu span {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: start;
+    padding-left: 10px;
+}
 
-.context-menu span:hover {
-    
-    background-color: #f0f0f0; /* Фон при наведенні */
+.modal-menu span {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
+
+
+
+
+.context-menu span:hover, .modal-menu span:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.modal-menu {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none;
+    height: 60px;
+    list-style-type: none;
+    position: absolute;
+    width: 120px;
+    z-index: 1000;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: row;
+    height: 50%;
+    width: 100%;
+}
+
+#textDelete {
+    align-items: center;
+    display: flex;
+    height: 50%;
+    justify-content: center;
+    width: 100%;
 }
 
 .block.highlight {
-    background-color: #e0e0e0; /* Світло-сірий фон */
+    background-color: #e0e0e0;
     box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2), inset -2px -2px 5px rgba(255, 255, 255, 0.7);
     transition: all 0.3s ease;
 }
-

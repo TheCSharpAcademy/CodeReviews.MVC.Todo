@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var _a;
 createContextMenu();
+createDeleteModal();
 document.addEventListener("contextmenu", (event) => {
     var _a;
     const target = event.target.closest(".block");
@@ -28,8 +29,12 @@ document.addEventListener("contextmenu", (event) => {
 });
 document.addEventListener("click", (event) => {
     const contextMenu = document.getElementById("contextMenu");
+    const modalMenu = document.getElementById("deleteModal");
     if (contextMenu && !contextMenu.contains(event.target)) {
         contextMenu.style.display = "none";
+    }
+    if (modalMenu && !modalMenu.contains(event.target)) {
+        modalMenu.style.display = "none";
     }
     document.querySelectorAll(".block.highlight").forEach((block) => {
         block.classList.remove("highlight");
@@ -60,7 +65,7 @@ document.addEventListener("click", (event) => {
         }
     }
     else if (target.id === "deleteTask") {
-        deleteTodoById(taskId);
+        showDeleteModal(taskId, event);
     }
     contextMenu.style.display = "none";
 });
@@ -116,7 +121,6 @@ function deleteTodoById(taskId) {
             const taskElement = (_a = document
                 .querySelector(`input[data-id="${taskId}"]`)) === null || _a === void 0 ? void 0 : _a.closest(".block");
             taskElement === null || taskElement === void 0 ? void 0 : taskElement.remove();
-            console.log(`Задача ${taskId} видалена`);
         }
         catch (error) {
             console.error("Deleting task error:", error);
@@ -278,6 +282,29 @@ function createContextMenu() {
     document.body.appendChild(contextMenu);
     return contextMenu;
 }
+function createDeleteModal() {
+    const modal = document.createElement("div");
+    modal.id = "deleteModal";
+    modal.className = "modal-menu";
+    modal.style.display = "none";
+    const mod = document.createElement("div");
+    mod.className = "modal-content";
+    const textDelete = document.createElement("div");
+    textDelete.id = "textDelete";
+    textDelete.textContent = "Are you sure?";
+    modal.appendChild(textDelete);
+    const confirmDelete = document.createElement("span");
+    confirmDelete.id = "confirmDelete";
+    confirmDelete.textContent = "Yes";
+    mod.appendChild(confirmDelete);
+    const cancelDelete = document.createElement("span");
+    cancelDelete.id = "cancelDelete";
+    cancelDelete.textContent = "No";
+    mod.appendChild(cancelDelete);
+    modal.appendChild(mod);
+    document.body.appendChild(modal);
+    return modal;
+}
 function moveCursorToEnd(element) {
     const range = document.createRange();
     const selection = window.getSelection();
@@ -285,6 +312,37 @@ function moveCursorToEnd(element) {
     range.collapse(false);
     selection === null || selection === void 0 ? void 0 : selection.removeAllRanges();
     selection === null || selection === void 0 ? void 0 : selection.addRange(range);
+}
+function showDeleteModal(taskId, event) {
+    const modal = document.getElementById("deleteModal");
+    if (!modal)
+        return;
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const modalWidth = modal.offsetWidth;
+    const modalHeight = modal.offsetHeight;
+    modal.style.display = "block";
+    modal.style.left = `${event.pageX}px`;
+    modal.style.top = `${event.pageY}px`;
+    const confirmButton = modal.querySelector("#confirmDelete");
+    const cancelButton = modal.querySelector("#cancelDelete");
+    event.stopPropagation();
+    const confirmHandler = () => {
+        deleteTodoById(taskId);
+        closeModal(modal, confirmHandler, cancelHandler);
+    };
+    const cancelHandler = () => {
+        closeModal(modal, confirmHandler, cancelHandler);
+    };
+    confirmButton.addEventListener("click", confirmHandler);
+    cancelButton.addEventListener("click", cancelHandler);
+}
+function closeModal(modal, confirmHandler, cancelHandler) {
+    modal.style.display = "none";
+    const confirmButton = modal.querySelector("#confirmDelete");
+    const cancelButton = modal.querySelector("#cancelDelete");
+    confirmButton.removeEventListener("click", confirmHandler);
+    cancelButton.removeEventListener("click", cancelHandler);
 }
 window.onload = fetchTodos;
 export {};
