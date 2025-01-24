@@ -1,4 +1,4 @@
-﻿﻿# ToDo
+# ToDo
 
 ## Given Requirements:
 - [x] A web application where you can manage your todo list.
@@ -9,6 +9,7 @@
 ## Features
 * Single Page Application(SPA) with bunch of functionality:
 ![image](https://github.com/TwilightSaw/CodeReviews.MVC.Todo/blob/main/Todo.TwilightSaw/images/pages_1.png)
+
 	
 	Press RMB pointing your cursor on the block with a chosen line to call the context menu:
 ![image](https://github.com/TwilightSaw/CodeReviews.MVC.Todo/blob/main/Todo.TwilightSaw/images/pages_2.png)
