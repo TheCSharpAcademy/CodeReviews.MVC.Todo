@@ -17,7 +17,7 @@
 	Press Edit to change the line behaviour and get the ability to edit the text: 
 ![image](https://github.com/TwilightSaw/CodeReviews.MVC.Todo/blob/main/Todo.TwilightSaw/images/pages_3.png)
 
-	Press Delete to call the modal menu with confirmation choice: Press Yes to delete the line or No to decline the offer: 
+	Press Delete to call the modal menu with a confirmation choice: Press Yes to delete the line or No to decline the offer: 
 ![image](https://github.com/TwilightSaw/CodeReviews.MVC.Todo/blob/main/Todo.TwilightSaw/images/pages_4.png)
 
 	Press LMB on the line to cross or uncross the chosen line:
