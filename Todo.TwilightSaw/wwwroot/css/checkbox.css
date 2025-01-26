@@ -1,0 +1,100 @@
+﻿.hidden-checkbox { display: none; }
+
+.hidden-checkbox:checked ~ .todo-text {
+    color: gray;
+    text-decoration: line-through;
+}
+
+.custom-checkbox {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+}
+
+
+
+
+
+
+
+
+.context-menu {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none;
+    height: 60px;
+    list-style-type: none;
+    position: absolute;
+    width: 70px;
+    z-index: 1000;
+}
+
+
+
+
+.context-menu div {
+    align-items: ;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;        
+}
+
+.context-menu span {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: start;
+    padding-left: 10px;
+}
+
+.modal-menu span {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
+
+
+
+
+.context-menu span:hover, .modal-menu span:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.modal-menu {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none;
+    height: 60px;
+    list-style-type: none;
+    position: absolute;
+    width: 120px;
+    z-index: 1000;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: row;
+    height: 50%;
+    width: 100%;
+}
+
+#textDelete {
+    align-items: center;
+    display: flex;
+    height: 50%;
+    justify-content: center;
+    width: 100%;
+}
+
+.block.highlight {
+    background-color: #e0e0e0;
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2), inset -2px -2px 5px rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+}

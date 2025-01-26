@@ -1,0 +1,13 @@
+﻿{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "outDir": "./wwwroot/js",
+    "rootDir": "./wwwroot/ts",
+    "sourceMap": true,
+    "strict": true
+  },
+  "include": [
+    "wwwroot/ts/**/*.ts"
+  ]
+}

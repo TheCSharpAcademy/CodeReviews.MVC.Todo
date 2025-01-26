@@ -1,0 +1,95 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    background-attachment: fixed;
+    background-image: url('/lib/background.PNG');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Poiret One', sans-serif;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+
+
+
+
+.list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+img {
+    width: 24px;
+    cursor: pointer;
+}
+
+
+.todoList {
+    display: flex;
+    width: 1000px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.todoAdd {
+    padding: 10px;
+    display: flex;
+    width: 500px;
+    justify-content: space-between;
+}
+
+#todoName, #todoName:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    width: 90%;
+    border-bottom: 1px solid #ccc;
+}
+
+.block {
+    display: flex;
+    width: 500px;
+    height: auto;
+    padding: 5px;
+    justify-content: space-between;
+}
+
+.todo-text {
+    overflow-wrap: break-word;
+    white-space: normal;
+    word-break: break-word;
+    font-size: 16px;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+    .todo-text.editable {
+        outline: none;
+        border-bottom: 1px solid grey;
+
+    }
+
+
