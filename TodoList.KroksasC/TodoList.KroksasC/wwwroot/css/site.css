@@ -1,0 +1,77 @@
+﻿input[type='submit'], button{
+    cursor: pointer;
+    background-color: cornflowerblue;
+    border-radius: 10px;
+    padding: 5px auto;
+
+}
+#editForm {
+    display: none;
+}
+[aria-label] {
+    cursor: pointer;
+}
+input[type='submit']:hover {
+    background-color: blue;
+}
+button:hover{
+    background-color: blue;
+}
+
+.container h1 {
+    font-family: Arial, sans-serif;
+}
+.container table {
+    font-family: Arial, sans-serif;
+    border-collapse: collapse;
+    margin: 20px auto;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    background-color: azure;
+    width: 100%;
+    table-layout: fixed;
+    word-wrap: break-word; 
+    overflow-x: auto;
+}
+
+.container th, .container tr, .container tbody {
+    padding: 10px;
+    width: 60%;
+}
+.container td, .container th {
+    width: 50px;
+    height: 20px; 
+    padding: 10px; 
+}
+.container tr{
+    border-bottom: 1px solid;
+}
+.container tr:last-child{
+    border-bottom: none;
+}
+.container {
+    width: 80%;
+    margin: 0 auto;
+    background: lightblue;
+    text-align: center;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    min-height: 100vh; 
+    padding: 20px;
+    border-radius: 15px;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-start; 
+    overflow-x: auto; 
+}
+.container th{
+    border-bottom: 3px solid;
+}
+@media (max-width: 768px) {
+    .container table {
+        width: 80%;
+        padding: 10px;
+    }
+    .container{
+        width: 100%;
+    }
+}

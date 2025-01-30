@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoList.KroksasC", "TodoList.KroksasC\TodoList.KroksasC.csproj", "{0B5763C0-E783-41AF-BC09-99FB28968A62}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B5763C0-E783-41AF-BC09-99FB28968A62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B5763C0-E783-41AF-BC09-99FB28968A62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B5763C0-E783-41AF-BC09-99FB28968A62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B5763C0-E783-41AF-BC09-99FB28968A62}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4A8B6080-0249-4F50-9C57-63FD9DF71B74}
+	EndGlobalSection
+EndGlobal
